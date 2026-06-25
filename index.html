@@ -607,7 +607,7 @@
       top: 72px;
       bottom: 88px;
       right: 162px;
-      z-index: 4;
+      z-index: 6;
       pointer-events: auto;
       touch-action: none;
       display: none;
@@ -753,7 +753,6 @@
         <button type="button" class="ar-ctrl-btn" id="drone-rot-r" aria-label="Rotate right">↻</button>
       </div>
       <button type="button" class="ar-ctrl-btn" id="drone-auto-spin-toggle" style="width:100%;margin-bottom:6px;">Spin: ON</button>
-      <button type="button" class="ar-ctrl-btn secondary" id="drone-spin-toggle" style="width:100%;margin-bottom:6px;">Props: ON</button>
       <button type="button" class="ar-ctrl-btn" id="drone-reset" style="width:100%;">Reset</button>
     </div>
     <!-- Live debug status (localtunnel / mobile) -->
@@ -1540,21 +1539,16 @@
     depth: 0.16,
     rotY: 0,
     rotX: 0,
-    props: true,
   };
   const FLOAT_ANIM = 'property: position; from: 0 -0.02 0; to: 0 0.05 0; loop: true; dur: 2200; dir: alternate; easing: easeInOutQuad';
-  const AUTO_SPIN_ANIM = 'property: rotation; to: 0 360 0; loop: true; dur: 7200; easing: linear';
-  const PROPS_SPIN_SPEED = 24;
-  const TOUCH_DRAG_THRESHOLD = 12;
+  const AUTO_SPIN_PERIOD = 3.5;
+  const TOUCH_DRAG_THRESHOLD = 4;
   const SCALE_MIN = 0.08;
   const SCALE_MAX = 0.45;
 
   let droneBlobUrl = null;
   let dronePreloadPromise = null;
   let dronePreloadPct = 0;
-  let propSpinMeshes = [];
-  let propSpinnerObjs = [];
-  let propSpinEnabled = true;
   let autoSpinEnabled = true;
   let activeArScene = null;
   let touchDrag = { active: false, pending: false, startX: 0, startY: 0, startRotY: 0, startRotX: 0 };
@@ -1683,8 +1677,7 @@
           rotation="0 ${d.rotY} 0"
           scale="${d.scale} ${d.scale} ${d.scale}">
 
-          <a-entity id="drone-yaw"
-            animation__autospin="${AUTO_SPIN_ANIM}">
+          <a-entity id="drone-yaw">
 
             <a-entity id="drone-root"
               gltf-model="url(${src})"
@@ -1717,13 +1710,11 @@
       droneRoot.addEventListener('model-loaded', () => {
         const src = droneBlobUrl ? 'cached ✓' : 'network';
         setDbg('dbg-drone', `white_drone.glb: loaded ✓ (${src})`, 'ok');
-        setArHint('Pinch to zoom · drag to spin · tap Spin to auto-rotate again');
+        setArHint('Drag to spin · pinch to zoom · tap Spin to auto-rotate');
         document.getElementById('target-badge').textContent = '✓ DRONE LIVE';
         document.getElementById('ar-controls').classList.add('visible');
-        initPropellers(droneRoot, scene);
-        setPropsSpin(true);
         setAutoSpin(true);
-        registerDroneTick(scene);
+        registerAutoSpinTick(scene);
       });
       droneRoot.addEventListener('model-error', (e) => {
         console.error('Drone model-error:', e);
@@ -1764,83 +1755,14 @@
     rig.setAttribute('scale', `${s} ${s} ${s}`);
   }
 
-  function clearPropellers() {
-    propSpinMeshes = [];
-    propSpinnerObjs.forEach(g => { if (g.parent) g.parent.remove(g); });
-    propSpinnerObjs = [];
-  }
-
-  function initPropellers(droneRoot, scene) {
-    clearPropellers();
-    const model = droneRoot.getObject3D('mesh');
-    if (!model || !window.AFRAME) return;
-
-    const THREE = AFRAME.THREE;
-    model.traverse(obj => {
-      const n = obj.name || '';
-      if (/prop_[1-4]/i.test(n) || /propeller/i.test(n)) {
-        obj.userData.spinDir = /prop_2|prop_4/i.test(n) ? -1 : 1;
-        propSpinMeshes.push(obj);
-      }
-    });
-
-    if (propSpinMeshes.length === 0) {
-      model.updateMatrixWorld(true);
-      const box = new THREE.Box3().setFromObject(model);
-      const size = box.getSize(new THREE.Vector3());
-      const center = box.getCenter(new THREE.Vector3());
-      const y = box.max.y - size.y * 0.06;
-      const hx = size.x * 0.34;
-      const hz = size.z * 0.34;
-      const dirs = [1, -1, 1, -1];
-      [[1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(([sx, sz], i) => {
-        const group = new THREE.Group();
-        group.position.set(center.x + sx * hx, y, center.z + sz * hz);
-        group.userData.spinDir = dirs[i];
-        for (let b = 0; b < 2; b++) {
-          const geo = new THREE.PlaneGeometry(size.x * 0.2, size.x * 0.035);
-          const mat = new THREE.MeshBasicMaterial({
-            color: 0xd8e8d8,
-            transparent: true,
-            opacity: 0.6,
-            side: THREE.DoubleSide,
-            depthWrite: false,
-          });
-          const blade = new THREE.Mesh(geo, mat);
-          blade.rotation.z = b * Math.PI;
-          group.add(blade);
-        }
-        model.add(group);
-        propSpinnerObjs.push(group);
-      });
-    }
-
-    registerDroneTick(scene);
-  }
-
-  function registerDroneTick(scene) {
-    if (!scene || scene.__droneTick) return;
-    scene.__droneTick = true;
+  function registerAutoSpinTick(scene) {
+    if (!scene || scene.__autoSpinTick) return;
+    scene.__autoSpinTick = true;
     scene.addEventListener('tick', (evt) => {
+      if (!autoSpinEnabled || !activeDroneYaw) return;
       const dt = Math.min((evt.detail && (evt.detail.timeDelta || evt.detail.delta) ? (evt.detail.timeDelta || evt.detail.delta) : 16) / 1000, 0.05);
-
-      if (propSpinEnabled) {
-        propSpinMeshes.forEach(m => {
-          m.rotation.z += PROPS_SPIN_SPEED * dt * (m.userData.spinDir || 1);
-        });
-        propSpinnerObjs.forEach(g => {
-          g.rotation.z += PROPS_SPIN_SPEED * dt * (g.userData.spinDir || 1);
-        });
-      }
+      activeDroneYaw.object3D.rotation.y += ((Math.PI * 2) / AUTO_SPIN_PERIOD) * dt;
     });
-  }
-
-  function setPropsSpin(on) {
-    propSpinEnabled = on;
-    const btn = document.getElementById('drone-spin-toggle');
-    if (!btn) return;
-    btn.textContent = on ? 'Props: ON' : 'Props: OFF';
-    btn.dataset.spin = on ? 'on' : 'off';
   }
 
   function setAutoSpin(on) {
@@ -1850,10 +1772,7 @@
       btn.textContent = on ? 'Spin: ON' : 'Spin: OFF';
       btn.dataset.spin = on ? 'on' : 'off';
     }
-    if (!activeDroneYaw) return;
-    if (on) {
-      activeDroneYaw.setAttribute('animation__autospin', AUTO_SPIN_ANIM);
-    } else {
+    if (on && activeDroneYaw) {
       activeDroneYaw.removeAttribute('animation__autospin');
     }
   }
@@ -1949,7 +1868,7 @@
         setDroneScale(pinchZoom.startScale * ratio);
         return;
       }
-      if (!touchDrag.active || e.touches.length !== 1) return;
+      if (e.touches.length !== 1) return;
       move(e.touches[0].clientX, e.touches[0].clientY);
     }, { passive: true });
 
@@ -1976,7 +1895,7 @@
       setDroneScale(getDroneScale() * (e.deltaY > 0 ? 0.92 : 1.08));
     }, { passive: false });
     window.addEventListener('mousemove', (e) => {
-      if (!touchDrag.active) return;
+      if (!touchDrag.active && !touchDrag.pending) return;
       move(e.clientX, e.clientY);
     });
     window.addEventListener('mouseup', () => {
@@ -1990,10 +1909,6 @@
     document.getElementById('drone-scale').value  = Math.round(d.scale * 100);
     document.getElementById('drone-height').value = Math.round(d.height * 100);
     document.getElementById('drone-depth').value  = Math.round(d.depth * 100);
-    const spinBtn = document.getElementById('drone-spin-toggle');
-    spinBtn.textContent = 'Props: ON';
-    spinBtn.dataset.spin = 'on';
-    propSpinEnabled = true;
     setAutoSpin(true);
   }
 
@@ -2006,6 +1921,7 @@
     syncDroneUiFromDefaults();
     applyDroneTransform(activeDroneRig, AR_DRONE_DEFAULTS);
     setAutoSpin(true);
+    registerAutoSpinTick(scene);
 
     if (arControlsWired) return;
     arControlsWired = true;
@@ -2043,17 +1959,11 @@
       setAutoSpin(!on);
     });
 
-    document.getElementById('drone-spin-toggle').addEventListener('click', (e) => {
-      const on = e.currentTarget.dataset.spin !== 'off';
-      setPropsSpin(!on);
-    });
-
     document.getElementById('drone-reset').addEventListener('click', () => {
       if (!activeDroneRig || !activeDroneYaw || !activeDroneRoot) return;
       syncDroneUiFromDefaults();
       applyDroneTransform(activeDroneRig, AR_DRONE_DEFAULTS);
-      activeDroneYaw.setAttribute('rotation', '0 0 0');
-      setPropsSpin(true);
+      activeDroneYaw.object3D.rotation.set(0, 0, 0);
       setAutoSpin(true);
     });
   }
@@ -2221,7 +2131,7 @@
     const scene = sceneWrap.querySelector('a-scene');
     activeArScene = scene;
     if (scene) {
-      scene.__droneTick = false;
+      scene.__autoSpinTick = false;
     }
     if (!scene) {
       showArError('Failed to create the AR scene. Reload the page and try again.');
@@ -2312,7 +2222,6 @@
     activeDroneYaw = null;
     activeDroneRoot = null;
     activeArScene = null;
-    clearPropellers();
     touchDrag.active = false;
     touchDrag.pending = false;
     pinchZoom.active = false;
