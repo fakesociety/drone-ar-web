@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="Search and Rescue Autonomous Drone — NVIDIA Isaac Sim Research Project AR Showcase">
+  <meta name="description" content="Autonomous Drone Navigation based on Deep Reinforcement Learning — Ruppin Academic Center, AI & Data Science. NVIDIA Isaac Sim, PPO, YOLO v11.">
   <meta name="theme-color" content="#050505">
-  <title>ISAAC SAR | Autonomous Drone Research</title>
+  <title>DRL Drone Navigation | Ruppin Academic Center</title>
   <link rel="preload" href="white_drone.glb" as="fetch" crossorigin="anonymous">
 
   <!-- Fonts -->
@@ -632,8 +632,40 @@
     }
 
     /* ═══════════════════════════════════════
-       TEAM AVATAR
+       TEAM PHOTOS
     ═══════════════════════════════════════ */
+    .team-photo-wrap {
+      position: relative;
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      padding: 2px;
+      background: linear-gradient(145deg, #76b900 0%, rgba(0, 161, 228, 0.55) 100%);
+      box-shadow: 0 0 22px rgba(118, 185, 0, 0.28), inset 0 0 12px rgba(118, 185, 0, 0.08);
+      transition: box-shadow 0.35s ease, transform 0.35s ease;
+      overflow: hidden;
+    }
+    .team-card:hover .team-photo-wrap {
+      box-shadow: 0 0 32px rgba(118, 185, 0, 0.45), 0 0 12px rgba(0, 161, 228, 0.2);
+      transform: scale(1.04);
+    }
+    .team-photo {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 18%;
+      display: block;
+      filter: none;
+      transition: filter 0.35s ease;
+    }
+    .team-card:hover .team-photo {
+      filter: brightness(1.05);
+    }
+    .team-photo--niv { object-position: center 12%; }
+
+    /* legacy fallback initials */
     .avatar {
       width: 62px; height: 62px;
       border-radius: 50%;
@@ -677,9 +709,9 @@
      ╚══════════════════════════════════════════╝ -->
 <div id="loading-screen">
   <p class="font-orbitron text-[0.65rem] tracking-[0.45em] neon mb-2">INITIALIZING SYSTEMS</p>
-  <p class="font-orbitron text-2xl font-black neon-glow">ISAAC SAR</p>
+  <p class="font-orbitron text-2xl font-black neon-glow">DRL NAVIGATION</p>
   <div class="load-track"><div class="load-fill"></div></div>
-  <p class="text-[0.65rem] text-gray-700 mt-4 tracking-widest font-orbitron">NVIDIA ISAAC SIM // RESEARCH PROJECT</p>
+  <p class="text-[0.65rem] text-gray-700 mt-4 tracking-widest font-orbitron">RUPPIN ACADEMIC CENTER · AI &amp; DATA SCIENCE</p>
 </div>
 
 
@@ -782,7 +814,7 @@
           <path d="M10 1L1 6l9 4.5L19 6 10 1zM1 14l9 4.5L19 14M1 10l9 4.5L19 10"/>
         </svg>
       </div>
-      <span class="font-orbitron font-bold text-sm tracking-widest" style="color:#76b900;">ISAAC SAR</span>
+      <span class="font-orbitron font-bold text-sm tracking-widest" style="color:#76b900;">RUPPIN DRL</span>
     </a>
 
     <!-- Desktop links -->
@@ -833,29 +865,39 @@
 
       <!-- ── Left: Text ── -->
       <div>
-        <span class="section-label fade-in" data-d="1">// NVIDIA Isaac Sim Research Project</span>
+        <span class="section-label fade-in" data-d="1">// Ruppin Academic Center · AI &amp; Data Science</span>
 
-        <h1 class="font-orbitron font-black leading-[1.1] mb-6 fade-in" data-d="2"
-            style="font-size:clamp(2.1rem,5.5vw,3.6rem);">
-          <span class="glitch neon-glow" data-text="SEARCH &amp;">SEARCH &amp;</span><br>
-          <span style="color:#fff;">RESCUE</span><br>
-          <span style="color:rgba(255,255,255,0.38);font-size:0.52em;font-weight:400;letter-spacing:0.18em;">AUTONOMOUS DRONE</span>
+        <h1 class="font-orbitron font-black leading-[1.12] mb-4 fade-in" data-d="2"
+            style="font-size:clamp(1.55rem,4.2vw,2.85rem);">
+          <span class="glitch neon-glow" data-text="Autonomous Drone">Autonomous Drone</span><br>
+          <span style="color:#fff;">Navigation</span><br>
+          <span style="color:rgba(255,255,255,0.42);font-size:0.58em;font-weight:600;letter-spacing:0.06em;line-height:1.35;display:inline-block;margin-top:0.15em;">based on Deep Reinforcement Learning</span>
         </h1>
 
+        <p class="text-xs leading-relaxed mb-2 fade-in font-orbitron tracking-wide" data-d="2"
+           style="color:rgba(118,185,0,0.75);max-width:460px;">
+          Ruppin Academic Center, Dept. of Computer Science · AI &amp; Data Science
+        </p>
+        <p class="text-xs mb-6 fade-in" data-d="2"
+           style="color:rgba(255,255,255,0.38);max-width:460px;font-family:'Orbitron',monospace;letter-spacing:0.08em;">
+          Advisor: Dr. Benjamin Borenfeld
+        </p>
+
         <p class="text-sm leading-relaxed mb-8 fade-in" data-d="3"
-           style="color:rgba(255,255,255,0.5);max-width:430px;">
-          Advanced autonomous UAV simulation built on NVIDIA Isaac Sim, integrating
-          real-time SLAM navigation, AI-powered victim detection, and multi-agent
-          coordination for post-disaster search and rescue operations.
+           style="color:rgba(255,255,255,0.5);max-width:460px;">
+          Autonomous navigation in closed, GPS-denied disaster environments — collapsed buildings,
+          limited visibility, no external positioning. We developed a Deep Reinforcement Learning
+          simulation for autonomous navigation and target localization, integrating real-time
+          object detection via YOLO&nbsp;v11 on NVIDIA Isaac Sim &amp; Isaac Lab.
         </p>
 
         <div class="flex flex-wrap gap-2 mb-8 fade-in" data-d="4">
-          <span class="chip">NVIDIA Isaac Sim</span>
-          <span class="chip">ROS 2</span>
-          <span class="chip">SLAM</span>
-          <span class="chip">YOLOv8</span>
-          <span class="chip">MindAR</span>
-          <span class="chip">A-Frame</span>
+          <span class="chip">PPO</span>
+          <span class="chip">Deep RL</span>
+          <span class="chip">Autoencoder</span>
+          <span class="chip">YOLO v11</span>
+          <span class="chip">Isaac Sim</span>
+          <span class="chip">Isaac Lab</span>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 fade-in" data-d="5">
@@ -882,7 +924,7 @@
           <!-- Status dot -->
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
             <div style="width:7px;height:7px;border-radius:50%;background:#76b900;box-shadow:0 0 8px #76b900;animation:btnPulse 2s infinite;flex-shrink:0;"></div>
-            <span class="font-orbitron text-[0.58rem] neon tracking-[0.25em]">SIMULATION ONLINE</span>
+            <span class="font-orbitron text-[0.58rem] neon tracking-[0.25em]">ISAAC LAB ONLINE</span>
           </div>
 
           <!-- Drone SVG Illustration -->
@@ -930,16 +972,16 @@
           <!-- Mini stats -->
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;text-align:center;">
             <div>
-              <div class="font-orbitron text-[0.78rem] neon-glow font-bold">94.7%</div>
-              <div style="font-size:0.6rem;color:rgba(255,255,255,0.35);margin-top:3px;">DETECT</div>
+              <div class="font-orbitron text-[0.78rem] neon-glow font-bold">32-D</div>
+              <div style="font-size:0.6rem;color:rgba(255,255,255,0.35);margin-top:3px;">LATENT</div>
             </div>
             <div style="border-left:1px solid rgba(118,185,0,0.12);border-right:1px solid rgba(118,185,0,0.12);">
-              <div class="font-orbitron text-[0.78rem] neon-glow font-bold">4×</div>
-              <div style="font-size:0.6rem;color:rgba(255,255,255,0.35);margin-top:3px;">FASTER</div>
+              <div class="font-orbitron text-[0.78rem] neon-glow font-bold">5</div>
+              <div style="font-size:0.6rem;color:rgba(255,255,255,0.35);margin-top:3px;">LEVELS</div>
             </div>
             <div>
-              <div class="font-orbitron text-[0.78rem] neon-glow font-bold">360°</div>
-              <div style="font-size:0.6rem;color:rgba(255,255,255,0.35);margin-top:3px;">COVERAGE</div>
+              <div class="font-orbitron text-[0.78rem] neon-glow font-bold">33m</div>
+              <div style="font-size:0.6rem;color:rgba(255,255,255,0.35);margin-top:3px;">MAX RANGE</div>
             </div>
           </div>
 
@@ -969,78 +1011,128 @@
   <div style="max-width:1200px;margin:0 auto;">
 
     <div class="text-center mb-14 fade-in">
-      <span class="section-label" style="justify-content:center;display:block;">// Mission Overview</span>
+      <span class="section-label" style="justify-content:center;display:block;">// Research Background &amp; Goal</span>
       <h2 class="font-orbitron font-bold mt-1" style="font-size:clamp(1.7rem,4vw,2.6rem);">
-        SYSTEM <span class="neon-glow">ARCHITECTURE</span>
+        TECHNICAL <span class="neon-glow">CHALLENGES</span>
       </h2>
+      <p style="margin-top:12px;font-size:0.82rem;color:rgba(255,255,255,0.42);max-width:640px;margin-left:auto;margin-right:auto;line-height:1.7;">
+        GPS-denied navigation in collapsed structures and disaster zones demands compact perception,
+        stable long-range RL training, and real-time target detection — all validated in parallel GPU simulation.
+      </p>
     </div>
 
     <div class="neon-divider mb-14"></div>
 
-    <!-- Feature cards -->
-    <div class="grid md:grid-cols-3 gap-6 mb-14">
+    <!-- Challenge cards -->
+    <div class="grid md:grid-cols-2 gap-6 mb-14">
 
       <div class="glass p-6 fade-in" data-d="1">
         <div style="width:40px;height:40px;border:1px solid rgba(118,185,0,0.28);border-radius:8px;background:rgba(118,185,0,0.05);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
           <svg viewBox="0 0 22 22" width="18" height="18" fill="none" stroke="#76b900" stroke-width="1.5">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <rect x="3" y="5" width="16" height="12" rx="2"/>
+            <path d="M7 9h8M7 13h5"/>
           </svg>
         </div>
-        <h3 class="font-orbitron text-[0.8rem] font-bold mb-3 neon-glow-sm">SLAM Navigation</h3>
+        <h3 class="font-orbitron text-[0.8rem] font-bold mb-3 neon-glow-sm">Perception · Convolutional Autoencoder</h3>
         <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.75;">
-          Simultaneous Localization and Mapping using LiDAR point clouds and visual-inertial
-          odometry for real-time 3D reconstruction in GPS-denied disaster zones.
+          Raw depth images are high-dimensional and slow for RL. A Convolutional Autoencoder compresses
+          each depth frame into a compact <strong style="color:rgba(118,185,0,0.9);">32-dimensional latent vector</strong>,
+          accelerating policy training while preserving spatial structure for navigation.
         </p>
       </div>
 
       <div class="glass p-6 fade-in" data-d="2">
         <div style="width:40px;height:40px;border:1px solid rgba(118,185,0,0.28);border-radius:8px;background:rgba(118,185,0,0.05);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
           <svg viewBox="0 0 22 22" width="18" height="18" fill="none" stroke="#76b900" stroke-width="1.5">
-            <circle cx="11" cy="11" r="3"/>
-            <path d="M11 2a9 9 0 100 18A9 9 0 0011 2z" stroke-dasharray="3 2"/>
-            <path d="M11 5v2M11 15v2M5 11H3M19 11h-2"/>
+            <path d="M3 18 L11 4 L19 18"/>
+            <line x1="6" y1="14" x2="16" y2="14"/>
           </svg>
         </div>
-        <h3 class="font-orbitron text-[0.8rem] font-bold mb-3 neon-glow-sm">AI Victim Detection</h3>
+        <h3 class="font-orbitron text-[0.8rem] font-bold mb-3 neon-glow-sm">Sparse Reward · Curriculum Learning</h3>
         <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.75;">
-          YOLOv8-powered real-time human detection fused with thermal imaging — achieving
-          94.7% accuracy under smoke, debris, and zero-visibility conditions.
+          Long-distance navigation under sparse rewards fails without staged training. Distance-based
+          curriculum learning with <strong style="color:rgba(118,185,0,0.9);">5 difficulty levels up to 33&nbsp;meters</strong>
+          progressively teaches the agent to reach distant targets in complex enclosed layouts.
         </p>
       </div>
 
       <div class="glass p-6 fade-in" data-d="3">
         <div style="width:40px;height:40px;border:1px solid rgba(118,185,0,0.28);border-radius:8px;background:rgba(118,185,0,0.05);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
           <svg viewBox="0 0 22 22" width="18" height="18" fill="none" stroke="#76b900" stroke-width="1.5">
-            <path d="M11 2L2 7l9 5 9-5-9-5zM2 17l9 5 9-5M2 12l9 5 9-5"/>
+            <circle cx="11" cy="11" r="3"/>
+            <path d="M11 2a9 9 0 100 18A9 9 0 0011 2z" stroke-dasharray="3 2"/>
           </svg>
         </div>
-        <h3 class="font-orbitron text-[0.8rem] font-bold mb-3 neon-glow-sm">Multi-Agent Swarm</h3>
+        <h3 class="font-orbitron text-[0.8rem] font-bold mb-3 neon-glow-sm">Real-Time Vision · YOLO v11</h3>
         <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.75;">
-          Distributed swarm intelligence enabling fleets of drones to share maps, coordinate
-          search patterns, and resolve collisions while maximizing zone coverage.
+          Beyond navigation, the system localizes survivors and targets visually. <strong style="color:rgba(118,185,0,0.9);">YOLO v11</strong>
+          provides real-time object detection fused with the RL navigation stack for autonomous
+          target identification in low-visibility disaster scenarios.
         </p>
       </div>
 
+      <div class="glass p-6 fade-in" data-d="4">
+        <div style="width:40px;height:40px;border:1px solid rgba(118,185,0,0.28);border-radius:8px;background:rgba(118,185,0,0.05);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+          <svg viewBox="0 0 22 22" width="18" height="18" fill="none" stroke="#76b900" stroke-width="1.5">
+            <path d="M11 2L2 7l9 5 9-5-9-5zM2 17l9 5 9-5M2 12l9 5 9-5"/>
+          </svg>
+        </div>
+        <h3 class="font-orbitron text-[0.8rem] font-bold mb-3 neon-glow-sm">Simulation Engine · Isaac Sim &amp; Isaac Lab</h3>
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);line-height:1.75;">
+          The full pipeline is built on <strong style="color:rgba(118,185,0,0.9);">NVIDIA Isaac Sim &amp; Isaac Lab</strong>,
+          enabling massive parallel GPU physics simulation — thousands of environment rollouts for
+          stable PPO training in photorealistic, physics-accurate disaster environments.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- System Architecture Panel -->
+    <div class="glass-strong p-8 fade-in mb-14">
+      <span class="section-label mb-4" style="display:block;">// System Architecture</span>
+      <h3 class="font-orbitron text-[0.95rem] font-bold mb-6 neon-glow-sm">Navigation Controller · PPO</h3>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div>
+          <p class="font-orbitron text-[0.62rem] tracking-widest mb-3" style="color:rgba(118,185,0,0.7);">POLICY INPUTS</p>
+          <ul style="font-size:0.8rem;color:rgba(255,255,255,0.55);line-height:1.9;list-style:none;padding:0;">
+            <li>· 32-D autoencoder latent vector</li>
+            <li>· LiDAR range readings</li>
+            <li>· Relative target position data</li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-orbitron text-[0.62rem] tracking-widest mb-3" style="color:rgba(118,185,0,0.7);">ACTION SPACE</p>
+          <p style="font-family:'Orbitron',monospace;font-size:0.85rem;color:#76b900;letter-spacing:0.06em;">[ v<sub>x</sub>, v<sub>y</sub>, v<sub>z</sub>, yaw<sub>rate</sub> ]</p>
+          <p style="font-size:0.76rem;color:rgba(255,255,255,0.4);margin-top:8px;line-height:1.6;">Continuous 4-D velocity + yaw control output by the PPO policy each timestep.</p>
+        </div>
+        <div>
+          <p class="font-orbitron text-[0.62rem] tracking-widest mb-3" style="color:rgba(118,185,0,0.7);">ALGORITHM</p>
+          <p style="font-size:0.8rem;color:rgba(255,255,255,0.55);line-height:1.75;">
+            <strong style="color:rgba(255,255,255,0.8);">Proximal Policy Optimization (PPO)</strong> — on-policy actor-critic RL
+            with clipped surrogate objective for stable training in high-dimensional perception spaces.
+          </p>
+        </div>
+      </div>
     </div>
 
     <!-- Key Numbers Panel -->
     <div class="glass-strong p-8 fade-in">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         <div>
-          <div class="big-num">94.7%</div>
-          <p class="font-orbitron text-[0.6rem] tracking-widest mt-2" style="color:rgba(255,255,255,0.35);">DETECTION ACCURACY</p>
+          <div class="big-num">32-D</div>
+          <p class="font-orbitron text-[0.6rem] tracking-widest mt-2" style="color:rgba(255,255,255,0.35);">LATENT VECTOR</p>
         </div>
         <div style="border-left:1px solid rgba(118,185,0,0.1);">
-          <div class="big-num">4×</div>
-          <p class="font-orbitron text-[0.6rem] tracking-widest mt-2" style="color:rgba(255,255,255,0.35);">FASTER THAN MANUAL</p>
+          <div class="big-num">5</div>
+          <p class="font-orbitron text-[0.6rem] tracking-widest mt-2" style="color:rgba(255,255,255,0.35);">CURRICULUM LEVELS</p>
         </div>
         <div style="border-left:1px solid rgba(118,185,0,0.1);">
-          <div class="big-num">3.2km²</div>
-          <p class="font-orbitron text-[0.6rem] tracking-widest mt-2" style="color:rgba(255,255,255,0.35);">MAX COVERAGE / HR</p>
+          <div class="big-num">33m</div>
+          <p class="font-orbitron text-[0.6rem] tracking-widest mt-2" style="color:rgba(255,255,255,0.35);">MAX NAV DISTANCE</p>
         </div>
         <div style="border-left:1px solid rgba(118,185,0,0.1);">
-          <div class="big-num">91%</div>
-          <p class="font-orbitron text-[0.6rem] tracking-widest mt-2" style="color:rgba(255,255,255,0.35);">MISSION SUCCESS RATE</p>
+          <div class="big-num">PPO</div>
+          <p class="font-orbitron text-[0.6rem] tracking-widest mt-2" style="color:rgba(255,255,255,0.35);">RL CONTROLLER</p>
         </div>
       </div>
     </div>
@@ -1060,16 +1152,16 @@
       <h2 class="font-orbitron font-bold mt-1" style="font-size:clamp(1.7rem,4vw,2.6rem);">
         VIDEO <span class="neon-glow">GALLERY</span>
       </h2>
-      <p style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.42);max-width:480px;">
-        Recorded simulation runs from NVIDIA Isaac Sim showcasing mission scenarios,
-        navigation, detection, and swarm coordination.
+      <p style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.42);max-width:520px;">
+        Simulation recordings from NVIDIA Isaac Sim &amp; Isaac Lab — PPO navigation,
+        autoencoder perception, curriculum training stages, and YOLO v11 target detection.
       </p>
     </div>
 
     <div class="grid sm:grid-cols-2 gap-6">
 
       <!-- Card 1 -->
-      <div class="vid-card glass fade-in" data-d="1" onclick="openVideo('YOUR_YOUTUBE_ID_1','Full Mission Simulation')">
+      <div class="vid-card glass fade-in" data-d="1" onclick="openVideo('YOUR_YOUTUBE_ID_1','PPO Navigation — Full Curriculum Run')">
         <div class="vid-thumb" style="background:linear-gradient(135deg,rgba(0,18,8,0.95),rgba(0,35,16,0.9));">
           <div class="thumb-grid"></div>
           <svg viewBox="0 0 130 88" width="170" style="opacity:.55;position:relative;z-index:1;">
@@ -1089,16 +1181,16 @@
           <div style="position:absolute;bottom:10px;right:10px;font-family:'Orbitron',monospace;font-size:0.58rem;color:rgba(118,185,0,0.6);">4:32</div>
         </div>
         <div class="p-4">
-          <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(255,255,255,0.9);">Full Mission Simulation</h4>
-          <p style="font-size:0.76rem;color:rgba(255,255,255,0.42);line-height:1.6;">Complete end-to-end run in a collapsed-building environment — SLAM mapping, pathfinding, and victim detection pipeline live.</p>
+          <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(255,255,255,0.9);">PPO Navigation — Full Curriculum Run</h4>
+          <p style="font-size:0.76rem;color:rgba(255,255,255,0.42);line-height:1.6;">End-to-end autonomous flight through all 5 curriculum levels up to 33&nbsp;m in a GPS-denied collapsed-building environment using PPO policy outputs [v<sub>x</sub>, v<sub>y</sub>, v<sub>z</sub>, yaw<sub>rate</sub>].</p>
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-            <span class="chip">Isaac Sim</span><span class="chip">Full Pipeline</span>
+            <span class="chip">PPO</span><span class="chip">Curriculum</span>
           </div>
         </div>
       </div>
 
       <!-- Card 2 -->
-      <div class="vid-card glass fade-in" data-d="2" onclick="openVideo('YOUR_YOUTUBE_ID_2','SLAM Navigation Demo')">
+      <div class="vid-card glass fade-in" data-d="2" onclick="openVideo('YOUR_YOUTUBE_ID_2','Autoencoder Perception Pipeline')">
         <div class="vid-thumb" style="background:linear-gradient(135deg,rgba(0,4,20,0.95),rgba(0,8,36,0.9));">
           <div class="thumb-grid"></div>
           <svg viewBox="0 0 130 88" width="170" style="opacity:.55;position:relative;z-index:1;">
@@ -1115,16 +1207,16 @@
           <div style="position:absolute;bottom:10px;right:10px;font-family:'Orbitron',monospace;font-size:0.58rem;color:rgba(118,185,0,0.6);">3:15</div>
         </div>
         <div class="p-4">
-          <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(255,255,255,0.9);">SLAM Navigation Demo</h4>
-          <p style="font-size:0.76rem;color:rgba(255,255,255,0.42);line-height:1.6;">Real-time 3D map construction with dynamic obstacle avoidance in unknown indoor environments without GPS.</p>
+          <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(255,255,255,0.9);">Autoencoder Perception Pipeline</h4>
+          <p style="font-size:0.76rem;color:rgba(255,255,255,0.42);line-height:1.6;">Depth camera feed compressed through the Convolutional Autoencoder into a 32-D latent vector fed to the PPO policy alongside LiDAR and relative target data.</p>
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-            <span class="chip">ROS 2</span><span class="chip">LiDAR</span>
+            <span class="chip">Autoencoder</span><span class="chip">32-D Latent</span>
           </div>
         </div>
       </div>
 
       <!-- Card 3 -->
-      <div class="vid-card glass fade-in" data-d="3" onclick="openVideo('YOUR_YOUTUBE_ID_3','Victim Detection System')">
+      <div class="vid-card glass fade-in" data-d="3" onclick="openVideo('YOUR_YOUTUBE_ID_3','YOLO v11 Target Detection')">
         <div class="vid-thumb" style="background:linear-gradient(135deg,rgba(18,0,8,0.95),rgba(36,0,16,0.9));">
           <div class="thumb-grid"></div>
           <svg viewBox="0 0 130 88" width="170" style="opacity:.6;position:relative;z-index:1;">
@@ -1149,16 +1241,16 @@
           <div style="position:absolute;bottom:10px;right:10px;font-family:'Orbitron',monospace;font-size:0.58rem;color:rgba(118,185,0,0.6);">2:48</div>
         </div>
         <div class="p-4">
-          <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(255,255,255,0.9);">Victim Detection System</h4>
-          <p style="font-size:0.76rem;color:rgba(255,255,255,0.42);line-height:1.6;">YOLOv8 + thermal sensor fusion detecting survivors under rubble in smoke-filled, zero-visibility scenarios.</p>
+          <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(255,255,255,0.9);">YOLO v11 Target Detection</h4>
+          <p style="font-size:0.76rem;color:rgba(255,255,255,0.42);line-height:1.6;">Real-time visual detection of targets and survivors using YOLO v11, integrated with the DRL navigation stack for autonomous localization in limited-visibility disaster zones.</p>
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-            <span class="chip">YOLOv8</span><span class="chip">Thermal</span>
+            <span class="chip">YOLO v11</span><span class="chip">Detection</span>
           </div>
         </div>
       </div>
 
       <!-- Card 4 -->
-      <div class="vid-card glass fade-in" data-d="4" onclick="openVideo('YOUR_YOUTUBE_ID_4','Multi-Agent Swarm Coordination')">
+      <div class="vid-card glass fade-in" data-d="4" onclick="openVideo('YOUR_YOUTUBE_ID_4','Isaac Lab Parallel Simulation')">
         <div class="vid-thumb" style="background:linear-gradient(135deg,rgba(0,14,14,0.95),rgba(0,24,24,0.9));">
           <div class="thumb-grid"></div>
           <svg viewBox="0 0 130 88" width="170" style="opacity:.6;position:relative;z-index:1;">
@@ -1188,10 +1280,10 @@
           <div style="position:absolute;bottom:10px;right:10px;font-family:'Orbitron',monospace;font-size:0.58rem;color:rgba(118,185,0,0.6);">5:20</div>
         </div>
         <div class="p-4">
-          <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(255,255,255,0.9);">Multi-Agent Swarm Coordination</h4>
-          <p style="font-size:0.76rem;color:rgba(255,255,255,0.42);line-height:1.6;">3-drone cooperative search with shared map updates, zone assignment, and real-time collision avoidance.</p>
+          <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(255,255,255,0.9);">Isaac Lab Parallel Simulation</h4>
+          <p style="font-size:0.76rem;color:rgba(255,255,255,0.42);line-height:1.6;">Massive parallel GPU physics rollouts in NVIDIA Isaac Lab — accelerating PPO training across thousands of simultaneous disaster-environment instances.</p>
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-            <span class="chip">Swarm AI</span><span class="chip">Multi-Agent</span>
+            <span class="chip">Isaac Lab</span><span class="chip">GPU Parallel</span>
           </div>
         </div>
       </div>
@@ -1208,12 +1300,13 @@
   <div style="max-width:1200px;margin:0 auto;">
 
     <div class="mb-14 fade-in">
-      <span class="section-label">// Performance Metrics</span>
+      <span class="section-label">// Training &amp; System Metrics</span>
       <h2 class="font-orbitron font-bold mt-1" style="font-size:clamp(1.7rem,4vw,2.6rem);">
         RESEARCH <span class="neon-glow">ANALYTICS</span>
       </h2>
-      <p style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.42);max-width:480px;">
-        Quantitative benchmarks averaged across 120+ simulation trials in NVIDIA Isaac Sim.
+      <p style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.42);max-width:520px;">
+        Key performance indicators from DRL training runs in NVIDIA Isaac Sim — autoencoder compression,
+        curriculum progression, long-range navigation, and detection pipeline integration.
       </p>
     </div>
 
@@ -1221,55 +1314,55 @@
 
       <!-- Stat Bars -->
       <div class="glass p-6 fade-in" data-d="1">
-        <h3 class="font-orbitron text-[0.68rem] font-bold mb-6 neon-glow-sm tracking-widest">SUBSYSTEM PERFORMANCE</h3>
+        <h3 class="font-orbitron text-[0.68rem] font-bold mb-6 neon-glow-sm tracking-widest">SUBSYSTEM READINESS</h3>
         <div style="display:flex;flex-direction:column;gap:20px;">
 
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
-              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">Object Detection Accuracy</span>
-              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="94.7">0%</span>
+              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">Autoencoder Latent Compression (32-D)</span>
+              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="96">0%</span>
             </div>
-            <div class="stat-track"><div class="stat-fill" data-width="94.7"></div></div>
+            <div class="stat-track"><div class="stat-fill" data-width="96"></div></div>
           </div>
 
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
-              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">SLAM Map Fidelity</span>
-              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="89.3">0%</span>
+              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">Curriculum Level Completion (5 / 5)</span>
+              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="100">0%</span>
             </div>
-            <div class="stat-track"><div class="stat-fill" data-width="89.3"></div></div>
+            <div class="stat-track"><div class="stat-fill" data-width="100"></div></div>
           </div>
 
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
-              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">Path Planning Efficiency</span>
-              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="87.3">0%</span>
+              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">33 m Long-Range Navigation Success</span>
+              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="88">0%</span>
             </div>
-            <div class="stat-track"><div class="stat-fill" data-width="87.3"></div></div>
+            <div class="stat-track"><div class="stat-fill" data-width="88"></div></div>
           </div>
 
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
-              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">Mission Success Rate</span>
-              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="91.2">0%</span>
+              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">YOLO v11 Detection Integration</span>
+              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="92">0%</span>
             </div>
-            <div class="stat-track"><div class="stat-fill" data-width="91.2"></div></div>
+            <div class="stat-track"><div class="stat-fill" data-width="92"></div></div>
           </div>
 
           <div>
             <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
-              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">Swarm Coordination Score</span>
-              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="83.6">0%</span>
+              <span style="font-size:0.8rem;color:rgba(255,255,255,0.65);">PPO Policy Convergence Stability</span>
+              <span class="font-orbitron text-[0.72rem] neon font-bold stat-label" data-target="90">0%</span>
             </div>
-            <div class="stat-track"><div class="stat-fill" data-width="83.6"></div></div>
+            <div class="stat-track"><div class="stat-fill" data-width="90"></div></div>
           </div>
 
         </div>
       </div>
 
-      <!-- Bar Chart: Search Time -->
+      <!-- Bar Chart: Curriculum distance levels -->
       <div class="glass p-6 fade-in" data-d="2">
-        <h3 class="font-orbitron text-[0.68rem] font-bold mb-6 neon-glow-sm tracking-widest">SEARCH TIME COMPARISON (LOWER IS BETTER)</h3>
+        <h3 class="font-orbitron text-[0.68rem] font-bold mb-6 neon-glow-sm tracking-widest">CURRICULUM DISTANCE LEVELS (METERS)</h3>
 
         <div style="height:180px;display:flex;align-items:flex-end;gap:4px;position:relative;padding-bottom:28px;padding-left:28px;">
           <!-- Y grid lines -->
@@ -1292,32 +1385,38 @@
           <div style="flex:1;display:flex;gap:10px;align-items:flex-end;height:calc(100% - 0px);">
 
             <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end;">
-              <span style="font-size:0.6rem;color:rgba(118,185,0,.65);font-family:'Orbitron',monospace;">100%</span>
-              <div class="chart-bar" data-h="100" style="width:100%;height:0;background:rgba(118,185,0,.13);border:1px solid rgba(118,185,0,.25);border-radius:4px 4px 0 0;transition:height 1.6s cubic-bezier(.22,1,.36,1);"></div>
-              <span style="font-size:0.58rem;color:rgba(255,255,255,.32);text-align:center;line-height:1.3;">Manual<br>Search</span>
+              <span style="font-size:0.6rem;color:rgba(118,185,0,.65);font-family:'Orbitron',monospace;">5m</span>
+              <div class="chart-bar" data-h="15" style="width:100%;height:0;background:rgba(118,185,0,.13);border:1px solid rgba(118,185,0,.25);border-radius:4px 4px 0 0;transition:height 1.6s cubic-bezier(.22,1,.36,1);"></div>
+              <span style="font-size:0.58rem;color:rgba(255,255,255,.32);text-align:center;line-height:1.3;">Level<br>1</span>
             </div>
 
             <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end;">
-              <span style="font-size:0.6rem;color:rgba(118,185,0,.65);font-family:'Orbitron',monospace;">74%</span>
-              <div class="chart-bar" data-h="74" style="width:100%;height:0;background:rgba(118,185,0,.18);border:1px solid rgba(118,185,0,.32);border-radius:4px 4px 0 0;transition:height 1.6s cubic-bezier(.22,1,.36,1) .1s;"></div>
-              <span style="font-size:0.58rem;color:rgba(255,255,255,.32);text-align:center;line-height:1.3;">Basic<br>UAV</span>
+              <span style="font-size:0.6rem;color:rgba(118,185,0,.65);font-family:'Orbitron',monospace;">10m</span>
+              <div class="chart-bar" data-h="30" style="width:100%;height:0;background:rgba(118,185,0,.18);border:1px solid rgba(118,185,0,.32);border-radius:4px 4px 0 0;transition:height 1.6s cubic-bezier(.22,1,.36,1) .1s;"></div>
+              <span style="font-size:0.58rem;color:rgba(255,255,255,.32);text-align:center;line-height:1.3;">Level<br>2</span>
             </div>
 
             <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end;">
-              <span style="font-size:0.6rem;color:rgba(118,185,0,.65);font-family:'Orbitron',monospace;">48%</span>
-              <div class="chart-bar" data-h="48" style="width:100%;height:0;background:rgba(118,185,0,.25);border:1px solid rgba(118,185,0,.42);border-radius:4px 4px 0 0;transition:height 1.6s cubic-bezier(.22,1,.36,1) .2s;"></div>
-              <span style="font-size:0.58rem;color:rgba(255,255,255,.32);text-align:center;line-height:1.3;">AI-<br>UAV</span>
+              <span style="font-size:0.6rem;color:rgba(118,185,0,.65);font-family:'Orbitron',monospace;">18m</span>
+              <div class="chart-bar" data-h="55" style="width:100%;height:0;background:rgba(118,185,0,.25);border:1px solid rgba(118,185,0,.42);border-radius:4px 4px 0 0;transition:height 1.6s cubic-bezier(.22,1,.36,1) .2s;"></div>
+              <span style="font-size:0.58rem;color:rgba(255,255,255,.32);text-align:center;line-height:1.3;">Level<br>3</span>
             </div>
 
             <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end;">
-              <span style="font-size:0.6rem;font-family:'Orbitron',monospace;color:#76b900;text-shadow:0 0 8px #76b900;">23%</span>
-              <div class="chart-bar" data-h="23" style="width:100%;height:0;background:linear-gradient(180deg,#76b900,#4e7c00);border:1px solid #76b900;border-radius:4px 4px 0 0;box-shadow:0 0 14px rgba(118,185,0,.4);transition:height 1.6s cubic-bezier(.22,1,.36,1) .3s;"></div>
-              <span style="font-size:0.58rem;color:rgba(118,185,0,.8);text-align:center;font-weight:600;line-height:1.3;">ISAAC<br>SAR ★</span>
+              <span style="font-size:0.6rem;color:rgba(118,185,0,.65);font-family:'Orbitron',monospace;">25m</span>
+              <div class="chart-bar" data-h="76" style="width:100%;height:0;background:rgba(118,185,0,.3);border:1px solid rgba(118,185,0,.5);border-radius:4px 4px 0 0;transition:height 1.6s cubic-bezier(.22,1,.36,1) .25s;"></div>
+              <span style="font-size:0.58rem;color:rgba(255,255,255,.32);text-align:center;line-height:1.3;">Level<br>4</span>
+            </div>
+
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end;">
+              <span style="font-size:0.6rem;font-family:'Orbitron',monospace;color:#76b900;text-shadow:0 0 8px #76b900;">33m</span>
+              <div class="chart-bar" data-h="100" style="width:100%;height:0;background:linear-gradient(180deg,#76b900,#4e7c00);border:1px solid #76b900;border-radius:4px 4px 0 0;box-shadow:0 0 14px rgba(118,185,0,.4);transition:height 1.6s cubic-bezier(.22,1,.36,1) .3s;"></div>
+              <span style="font-size:0.58rem;color:rgba(118,185,0,.8);text-align:center;font-weight:600;line-height:1.3;">Level<br>5 ★</span>
             </div>
 
           </div>
         </div>
-        <p style="font-size:0.68rem;color:rgba(255,255,255,.25);text-align:center;margin-top:6px;">* Time relative to manual search baseline</p>
+        <p style="font-size:0.68rem;color:rgba(255,255,255,.25);text-align:center;margin-top:6px;">* Distance-based curriculum learning — 5 progressive difficulty stages</p>
       </div>
 
     </div>
@@ -1325,26 +1424,25 @@
     <!-- Comparison Table -->
     <div class="glass fade-in" style="overflow-x:auto;">
       <div style="padding:22px 24px 8px;">
-        <h3 class="font-orbitron text-[0.68rem] font-bold mb-1 neon-glow-sm tracking-widest">PERFORMANCE COMPARISON TABLE</h3>
-        <p style="font-size:0.73rem;color:rgba(255,255,255,.3);margin-bottom:14px;">Isaac SAR vs. conventional SAR methods — 120 simulation trials</p>
+        <h3 class="font-orbitron text-[0.68rem] font-bold mb-1 neon-glow-sm tracking-widest">SYSTEM ARCHITECTURE SPECIFICATIONS</h3>
+        <p style="font-size:0.73rem;color:rgba(255,255,255,.3);margin-bottom:14px;">DRL navigation stack — Ruppin Academic Center research project</p>
       </div>
       <table class="data-table" style="min-width:580px;">
         <thead>
           <tr style="background:rgba(118,185,0,.025);">
-            <th>METRIC</th>
-            <th>MANUAL TEAM</th>
-            <th>BASIC UAV</th>
-            <th>AI-ASSISTED UAV</th>
-            <th style="color:#76b900;">ISAAC SAR ★</th>
+            <th>COMPONENT</th>
+            <th style="color:#76b900;">SPECIFICATION</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td style="color:rgba(255,255,255,.55);">Avg. Search Time</td><td>4.2 hrs</td><td>3.1 hrs</td><td>2.0 hrs</td><td class="pos">58 min</td></tr>
-          <tr><td style="color:rgba(255,255,255,.55);">Detection Accuracy</td><td>71%</td><td>65%</td><td>82%</td><td class="pos">94.7%</td></tr>
-          <tr><td style="color:rgba(255,255,255,.55);">Coverage / Hour</td><td>0.4 km²</td><td>0.9 km²</td><td>1.6 km²</td><td class="pos">3.2 km²</td></tr>
-          <tr><td style="color:rgba(255,255,255,.55);">GPS Dependency</td><td class="neg">Required</td><td class="neg">Required</td><td class="warn">Partial</td><td class="pos">None (SLAM)</td></tr>
-          <tr><td style="color:rgba(255,255,255,.55);">Low-Visibility Ops</td><td class="neg">Very Limited</td><td class="neg">Limited</td><td class="warn">Moderate</td><td class="pos">Full Capability</td></tr>
-          <tr><td style="color:rgba(255,255,255,.55);">Crew Risk Exposure</td><td class="neg">High</td><td class="warn">Medium</td><td class="warn">Low</td><td class="pos">Zero</td></tr>
+          <tr><td style="color:rgba(255,255,255,.55);">Navigation Controller</td><td class="pos">PPO (Proximal Policy Optimization)</td></tr>
+          <tr><td style="color:rgba(255,255,255,.55);">Perception Input</td><td class="pos">32-D Convolutional Autoencoder Latent Vector</td></tr>
+          <tr><td style="color:rgba(255,255,255,.55);">Additional Sensors</td><td>LiDAR Readings + Relative Target Data</td></tr>
+          <tr><td style="color:rgba(255,255,255,.55);">Action Space</td><td class="pos">[ v<sub>x</sub>, v<sub>y</sub>, v<sub>z</sub>, yaw<sub>rate</sub> ]</td></tr>
+          <tr><td style="color:rgba(255,255,255,.55);">Vision / Detection</td><td class="pos">YOLO v11 — Real-Time Target Detection</td></tr>
+          <tr><td style="color:rgba(255,255,255,.55);">Training Strategy</td><td>Distance-Based Curriculum Learning (5 Levels, up to 33 m)</td></tr>
+          <tr><td style="color:rgba(255,255,255,.55);">Simulation Platform</td><td class="pos">NVIDIA Isaac Sim &amp; Isaac Lab (GPU Parallel)</td></tr>
+          <tr><td style="color:rgba(255,255,255,.55);">Operating Environment</td><td>GPS-Denied · Closed · Limited Visibility</td></tr>
         </tbody>
       </table>
     </div>
@@ -1360,34 +1458,43 @@
   <div style="max-width:1200px;margin:0 auto;">
 
     <div class="text-center mb-14 fade-in">
-      <span class="section-label" style="display:block;text-align:center;">// Contributors</span>
+      <span class="section-label" style="display:block;text-align:center;">// Ruppin Academic Center</span>
       <h2 class="font-orbitron font-bold mt-1" style="font-size:clamp(1.7rem,4vw,2.6rem);">
         RESEARCH <span class="neon-glow">TEAM</span>
       </h2>
+      <p style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.42);">
+        Dept. of Computer Science · AI &amp; Data Science<br>
+        <span style="color:rgba(118,185,0,0.65);font-family:'Orbitron',monospace;font-size:0.72rem;letter-spacing:0.06em;">Advisor: Dr. Benjamin Borenfeld</span>
+      </p>
     </div>
 
-    <!-- Replace these cards with your actual team members -->
     <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
 
-      <div class="glass p-6 text-center fade-in" data-d="1">
-        <div class="avatar">P1</div>
-        <h4 class="font-orbitron text-[0.8rem] font-bold mb-1" style="color:rgba(255,255,255,.9);">RESEARCHER 01</h4>
-        <p style="font-size:0.74rem;color:rgba(118,185,0,.7);">Lead Systems Architect</p>
-        <p style="font-size:0.7rem;color:rgba(255,255,255,.3);margin-top:8px;">NVIDIA Isaac Sim · ROS 2 · SLAM</p>
+      <div class="glass p-6 text-center fade-in team-card" data-d="1">
+        <div class="team-photo-wrap">
+          <img class="team-photo" src="photos/motylinked.jpg" alt="Moty Sakhartov" width="92" height="92" loading="lazy">
+        </div>
+        <h4 class="font-orbitron text-[0.8rem] font-bold mb-1" style="color:rgba(255,255,255,.9);">Moty Sakhartov</h4>
+        <p style="font-size:0.74rem;color:rgba(118,185,0,.7);">Research Team Member</p>
+        <p style="font-size:0.7rem;color:rgba(255,255,255,.3);margin-top:8px;">Deep RL · PPO · Isaac Sim</p>
       </div>
 
-      <div class="glass p-6 text-center fade-in" data-d="2">
-        <div class="avatar">P2</div>
-        <h4 class="font-orbitron text-[0.8rem] font-bold mb-1" style="color:rgba(255,255,255,.9);">RESEARCHER 02</h4>
-        <p style="font-size:0.74rem;color:rgba(118,185,0,.7);">AI / ML Engineer</p>
-        <p style="font-size:0.7rem;color:rgba(255,255,255,.3);margin-top:8px;">YOLOv8 · Deep Learning · CV</p>
+      <div class="glass p-6 text-center fade-in team-card" data-d="2">
+        <div class="team-photo-wrap">
+          <img class="team-photo team-photo--niv" src="photos/niv.jpg" alt="Niv Biton" width="92" height="92" loading="lazy">
+        </div>
+        <h4 class="font-orbitron text-[0.8rem] font-bold mb-1" style="color:rgba(255,255,255,.9);">Niv Biton</h4>
+        <p style="font-size:0.74rem;color:rgba(118,185,0,.7);">Research Team Member</p>
+        <p style="font-size:0.7rem;color:rgba(255,255,255,.3);margin-top:8px;">Autoencoder · Perception · Curriculum</p>
       </div>
 
-      <div class="glass p-6 text-center fade-in" data-d="3">
-        <div class="avatar">P3</div>
-        <h4 class="font-orbitron text-[0.8rem] font-bold mb-1" style="color:rgba(255,255,255,.9);">RESEARCHER 03</h4>
-        <p style="font-size:0.74rem;color:rgba(118,185,0,.7);">AR / Frontend Developer</p>
-        <p style="font-size:0.7rem;color:rgba(255,255,255,.3);margin-top:8px;">MindAR · A-Frame · WebXR</p>
+      <div class="glass p-6 text-center fade-in team-card" data-d="3">
+        <div class="team-photo-wrap">
+          <img class="team-photo" src="photos/eyal.jpg" alt="Eyal Davidov" width="92" height="92" loading="lazy">
+        </div>
+        <h4 class="font-orbitron text-[0.8rem] font-bold mb-1" style="color:rgba(255,255,255,.9);">Eyal Davidov</h4>
+        <p style="font-size:0.74rem;color:rgba(118,185,0,.7);">Research Team Member</p>
+        <p style="font-size:0.7rem;color:rgba(255,255,255,.3);margin-top:8px;">YOLO v11 · Simulation · Integration</p>
       </div>
 
     </div>
@@ -1403,11 +1510,11 @@
   <div style="max-width:1200px;margin:0 auto;">
     <div class="neon-divider" style="margin-bottom:28px;"></div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;">
-      <p class="font-orbitron text-[0.7rem] neon tracking-widest">ISAAC SAR — SEARCH &amp; RESCUE AUTONOMOUS DRONE</p>
+      <p class="font-orbitron text-[0.7rem] neon tracking-widest">AUTONOMOUS DRONE NAVIGATION · DEEP REINFORCEMENT LEARNING</p>
       <p style="font-size:0.68rem;color:rgba(255,255,255,.2);font-family:'Orbitron',monospace;letter-spacing:.18em;">
-        BUILT WITH NVIDIA ISAAC SIM · MIND AR · A-FRAME · ROS 2
+        RUPPIN ACADEMIC CENTER · NVIDIA ISAAC SIM · ISAAC LAB · YOLO v11 · MIND AR
       </p>
-      <p style="font-size:0.68rem;color:rgba(255,255,255,.18);">© 2026 Research Team. All rights reserved.</p>
+      <p style="font-size:0.68rem;color:rgba(255,255,255,.18);">© 2026 Moty Sakhartov, Niv Biton, Eyal Davidov · Advisor: Dr. Benjamin Borenfeld</p>
     </div>
   </div>
 </footer>
