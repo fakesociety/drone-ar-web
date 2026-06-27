@@ -1641,24 +1641,30 @@
   const DRONE_GLB_SRC = 'drone-ar.glb';            // fallback (~10 MB)
 
   const AR_DRONE_DEFAULTS = {
-    scale: 0.22,
+    scale: 0.2,
     height: 0.24,
     depth: 0.16,
     rotY: 0,
     rotX: 0,
   };
-  const SPIN_ANIM = 'property: rotation; to: 0 360 0; loop: true; dur: 4500; easing: linear';
-  const TOUCH_DRAG_THRESHOLD = 4;
+  const SPIN_SPEED_DEG = 72;
+  const YAW_SNAP_DEG = 15;
+  const TOUCH_DRAG_THRESHOLD = 6;
   const SCALE_MIN = 0.08;
   const SCALE_MAX = 0.45;
 
   let droneBlobUrl = null;
   let dronePreloadPromise = null;
   let dronePreloadPct = 0;
-  let autoSpinEnabled = true;
+  let autoSpinEnabled = false;
+  let droneModelReady = false;
+  let droneYaw = 0;
+  let dronePitch = 0;
+  let arSpinTick = null;
+  let arSpinLastMs = 0;
   let activeArScene = null;
   let touchDrag = { active: false, pending: false, startX: 0, startY: 0, startRotY: 0, startRotX: 0 };
-  let pinchZoom = { active: false, startDist: 0, startScale: 0.22 };
+  let pinchZoom = { active: false, startDist: 0, startScale: 0.2 };
 
   function getDroneModelUrl() {
     return droneBlobUrl || DRONE_GLB_AR;
@@ -1758,7 +1764,7 @@
     <a-scene
       mindar-image="imageTargetSrc: ${MIND_TARGET}; autoStart: true; uiLoading: no; uiError: no; uiScanning: yes;"
       color-space="sRGB"
-      renderer="colorManagement: true; physicallyCorrectLights: false; antialias: false; alpha: true;"
+      renderer="colorManagement: true; physicallyCorrectLights: false; antialias: false; alpha: true; precision: mediump; sortObjects: false;"
       embedded
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
@@ -1778,13 +1784,8 @@
 
         <a-entity id="drone-rig"
           position="0 ${d.height} ${d.depth}"
-          rotation="0 ${d.rotY} 0"
-          scale="${d.scale} ${d.scale} ${d.scale}">
-
-          <a-entity id="drone-root"
-            gltf-model="url(${src})">
-          </a-entity>
-
+          scale="${d.scale} ${d.scale} ${d.scale}"
+          gltf-model="url(${src})">
         </a-entity>
       </a-entity>
 
@@ -1800,20 +1801,22 @@
 
   function wireTargetAndDrone(scene) {
     const targetEl  = scene.querySelector('#ar-target');
-    const droneRoot = scene.querySelector('#drone-root');
+    const droneRig  = scene.querySelector('#drone-rig');
     if (!targetEl) return;
 
-    if (droneRoot) {
+    if (droneRig) {
       setDbg('dbg-drone', 'white_drone.glb: loading…', 'warn');
-      droneRoot.addEventListener('model-loaded', () => {
+      droneRig.addEventListener('model-loaded', () => {
         const src = droneBlobUrl ? 'cached ✓' : 'network';
         setDbg('dbg-drone', `white_drone.glb: loaded ✓ (${src})`, 'ok');
-        setArHint('Drag to spin · pinch to zoom · tap Spin to auto-rotate');
+        setArHint('Tap to stop spin · drag to rotate · pinch to zoom');
         document.getElementById('target-badge').textContent = '✓ DRONE LIVE';
         document.getElementById('ar-controls').classList.add('visible');
-        setAutoSpin(true);
+        droneModelReady = true;
+        applyDroneRotation(droneRig);
+        setTimeout(() => setAutoSpin(true), 500);
       });
-      droneRoot.addEventListener('model-error', (e) => {
+      droneRig.addEventListener('model-error', (e) => {
         console.error('Drone model-error:', e);
         setDbg('dbg-drone', 'white_drone.glb: FAIL', 'bad');
         setArHint('Drone failed to load — restart serve & hard refresh');
@@ -1822,9 +1825,9 @@
 
     targetEl.addEventListener('targetFound', () => {
       setDbg('dbg-track', 'Tracking: TARGET FOUND (idx 0)', 'ok');
-      const loaded = droneRoot && droneRoot.getObject3D('mesh');
+      const loaded = droneRig && droneRig.getObject3D('mesh');
       document.getElementById('target-badge').textContent = loaded ? '✓ DRONE LIVE' : '✓ TARGET: LOCKED';
-      setArHint(loaded ? 'Drone auto-spins until you touch · pinch to zoom' : 'Poster locked — loading drone…');
+      setArHint(loaded ? 'Tap or drag to control the drone · pinch to zoom' : 'Poster locked — loading drone…');
     });
 
     targetEl.addEventListener('targetLost', () => {
@@ -1835,40 +1838,76 @@
 
     wireArControls(scene);
     wireTouchDrag();
+    attachArSpinLoop(scene);
   }
 
   let activeDroneRig = null;
-  let activeDroneRoot = null;
   let arControlsWired = false;
+
+  function normalizeYaw(deg) {
+    return ((deg % 360) + 360) % 360;
+  }
+
+  function snapDroneYaw(step) {
+    if (!activeDroneRig) return;
+    droneYaw = normalizeYaw(Math.round(droneYaw / step) * step);
+    applyDroneRotation(activeDroneRig);
+  }
+
+  function applyDroneRotation(rig) {
+    if (!rig || !rig.object3D) return;
+    const T = window.THREE || (window.AFRAME && AFRAME.THREE);
+    if (!T) return;
+    const pitch = T.MathUtils.degToRad(Math.max(-35, Math.min(35, dronePitch)));
+    const yaw = T.MathUtils.degToRad(droneYaw);
+    rig.object3D.rotation.set(pitch, yaw, 0);
+  }
 
   function applyDroneTransform(rig, state) {
     if (!rig) return;
     const s = state.scale;
-    const rotX = state.rotX != null ? state.rotX : 0;
-    const rotY = state.rotY != null ? state.rotY : 0;
+    if (state.rotY != null) droneYaw = state.rotY;
+    if (state.rotX != null) dronePitch = state.rotX;
     rig.setAttribute('position', `0 ${state.height} ${state.depth}`);
-    rig.setAttribute('rotation', `${rotX} ${rotY} 0`);
     rig.setAttribute('scale', `${s} ${s} ${s}`);
+    applyDroneRotation(rig);
   }
 
-  function setAutoSpin(on) {
+  function attachArSpinLoop(scene) {
+    if (arSpinTick) return;
+    arSpinLastMs = performance.now();
+    arSpinTick = (t) => {
+      if (!activeDroneRig || !autoSpinEnabled || !droneModelReady) return;
+      if (touchDrag.active || touchDrag.pending || pinchZoom.active) return;
+      const dt = Math.min(0.05, (t - arSpinLastMs) / 1000);
+      arSpinLastMs = t;
+      droneYaw = normalizeYaw(droneYaw + SPIN_SPEED_DEG * dt);
+      applyDroneRotation(activeDroneRig);
+    };
+    scene.addEventListener('tick', arSpinTick);
+  }
+
+  function detachArSpinLoop() {
+    if (activeArScene && arSpinTick) {
+      activeArScene.removeEventListener('tick', arSpinTick);
+    }
+    arSpinTick = null;
+  }
+
+  function setAutoSpin(on, snap) {
     autoSpinEnabled = on;
+    arSpinLastMs = performance.now();
     const btn = document.getElementById('drone-auto-spin-toggle');
     if (btn) {
       btn.textContent = on ? 'Spin: ON' : 'Spin: OFF';
       btn.dataset.spin = on ? 'on' : 'off';
     }
-    if (!activeDroneRoot) return;
-    if (on) {
-      activeDroneRoot.setAttribute('animation__spin', SPIN_ANIM);
-    } else {
-      activeDroneRoot.removeAttribute('animation__spin');
-    }
+    if (!on && snap) snapDroneYaw(YAW_SNAP_DEG);
   }
 
   function pauseAutoSpinFromTouch() {
     if (!autoSpinEnabled) return;
-    setAutoSpin(false);
+    setAutoSpin(false, true);
   }
 
   function getDroneScale() {
@@ -1880,11 +1919,7 @@
   function setDroneScale(scale) {
     if (!activeDroneRig) return;
     const clamped = Math.min(SCALE_MAX, Math.max(SCALE_MIN, scale));
-    const rot = activeDroneRig.getAttribute('rotation') || { x: 0, y: 0, z: 0 };
-    const pos = activeDroneRig.getAttribute('position') || { x: 0, y: AR_DRONE_DEFAULTS.height, z: AR_DRONE_DEFAULTS.depth };
     activeDroneRig.setAttribute('scale', `${clamped} ${clamped} ${clamped}`);
-    activeDroneRig.setAttribute('position', `${pos.x} ${pos.y} ${pos.z}`);
-    activeDroneRig.setAttribute('rotation', `${rot.x} ${rot.y} 0`);
     document.getElementById('drone-scale').value = Math.round(clamped * 100);
   }
 
@@ -1899,14 +1934,13 @@
 
     const beginPending = (x, y) => {
       if (!activeDroneRig) return false;
-      const rot = activeDroneRig.getAttribute('rotation') || { x: 0, y: 0, z: 0 };
       touchDrag = {
         active: false,
         pending: true,
         startX: x,
         startY: y,
-        startRotY: parseFloat(rot.y) || 0,
-        startRotX: parseFloat(rot.x) || 0,
+        startRotY: droneYaw,
+        startRotX: dronePitch,
       };
       return true;
     };
@@ -1940,7 +1974,9 @@
       if (!touchDrag.active || !activeDroneRig) return;
       const dx = x - touchDrag.startX;
       const dy = y - touchDrag.startY;
-      activeDroneRig.setAttribute('rotation', `${touchDrag.startRotX + dy * 0.28} ${touchDrag.startRotY + dx * 0.5} 0`);
+      droneYaw = touchDrag.startRotY + dx * 0.45;
+      dronePitch = Math.max(-35, Math.min(35, touchDrag.startRotX + dy * 0.22));
+      applyDroneRotation(activeDroneRig);
     };
 
     zone.addEventListener('touchstart', (e) => {
@@ -1964,6 +2000,8 @@
     zone.addEventListener('touchend', (e) => {
       if (e.touches.length < 2) pinchZoom.active = false;
       if (e.touches.length === 0) {
+        if (touchDrag.pending && !touchDrag.active) pauseAutoSpinFromTouch();
+        else if (touchDrag.active) snapDroneYaw(YAW_SNAP_DEG);
         touchDrag.active = false;
         touchDrag.pending = false;
       }
@@ -1998,14 +2036,14 @@
     document.getElementById('drone-scale').value  = Math.round(d.scale * 100);
     document.getElementById('drone-height').value = Math.round(d.height * 100);
     document.getElementById('drone-depth').value  = Math.round(d.depth * 100);
-    setAutoSpin(true);
   }
 
   function wireArControls(scene) {
     activeDroneRig = scene.querySelector('#drone-rig');
-    activeDroneRoot = scene.querySelector('#drone-root');
-    if (!activeDroneRig || !activeDroneRoot) return;
+    if (!activeDroneRig) return;
 
+    droneYaw = AR_DRONE_DEFAULTS.rotY;
+    dronePitch = AR_DRONE_DEFAULTS.rotX;
     syncDroneUiFromDefaults();
     applyDroneTransform(activeDroneRig, AR_DRONE_DEFAULTS);
 
@@ -2014,12 +2052,12 @@
 
     const updateFromSliders = () => {
       if (!activeDroneRig) return;
-      const rot = activeDroneRig.getAttribute('rotation') || { x: 0, y: AR_DRONE_DEFAULTS.rotY, z: 0 };
       applyDroneTransform(activeDroneRig, {
         scale:  Number(document.getElementById('drone-scale').value) / 100,
         height: Number(document.getElementById('drone-height').value) / 100,
         depth:  Number(document.getElementById('drone-depth').value) / 100,
-        rotY:   rot.y,
+        rotY:   droneYaw,
+        rotX:   dronePitch,
       });
     };
 
@@ -2030,27 +2068,28 @@
     document.getElementById('drone-rot-l').addEventListener('click', () => {
       if (!activeDroneRig) return;
       pauseAutoSpinFromTouch();
-      const rot = activeDroneRig.getAttribute('rotation') || { x: 0, y: 0, z: 0 };
-      activeDroneRig.setAttribute('rotation', `${rot.x} ${rot.y - 20} 0`);
+      droneYaw = normalizeYaw(droneYaw - 20);
+      applyDroneRotation(activeDroneRig);
     });
     document.getElementById('drone-rot-r').addEventListener('click', () => {
       if (!activeDroneRig) return;
       pauseAutoSpinFromTouch();
-      const rot = activeDroneRig.getAttribute('rotation') || { x: 0, y: 0, z: 0 };
-      activeDroneRig.setAttribute('rotation', `${rot.x} ${rot.y + 20} 0`);
+      droneYaw = normalizeYaw(droneYaw + 20);
+      applyDroneRotation(activeDroneRig);
     });
 
     document.getElementById('drone-auto-spin-toggle').addEventListener('click', (e) => {
       const on = e.currentTarget.dataset.spin !== 'off';
-      setAutoSpin(!on);
+      setAutoSpin(!on, false);
     });
 
     document.getElementById('drone-reset').addEventListener('click', () => {
-      if (!activeDroneRig || !activeDroneRoot) return;
+      if (!activeDroneRig) return;
+      droneYaw = AR_DRONE_DEFAULTS.rotY;
+      dronePitch = AR_DRONE_DEFAULTS.rotX;
       syncDroneUiFromDefaults();
       applyDroneTransform(activeDroneRig, AR_DRONE_DEFAULTS);
-      activeDroneRoot.setAttribute('rotation', '0 0 0');
-      setAutoSpin(true);
+      setAutoSpin(true, false);
     });
   }
 
@@ -2094,6 +2133,8 @@
 
   function showArError(message) {
     arLaunching = false;
+    detachArSpinLoop();
+    droneModelReady = false;
     document.getElementById('ar-overlay').classList.remove('ar-live');
     document.getElementById('ar-overlay').style.display = 'block';
     document.getElementById('grid-scan-anim').classList.add('hidden');
@@ -2224,7 +2265,8 @@
     scene.addEventListener('loaded', () => {
       const renderer = scene.renderer;
       if (renderer && renderer.setPixelRatio) {
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        const cap = ('ontouchstart' in window) ? 1 : 1.25;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, cap));
       }
       wireTargetAndDrone(scene);
     }, { once: true });
@@ -2258,7 +2300,9 @@
 
     // Relocate MindAR's <video> into our container as soon as it appears —
     // otherwise it sits behind #ar-overlay (z-index 9999) and nothing renders.
-    relocatePoll = setInterval(() => relocateVideo(sceneWrap), 200);
+    relocatePoll = setInterval(() => {
+      if (relocateVideo(sceneWrap)) clearInterval(relocatePoll);
+    }, 250);
 
     // Primary success signal: MindAR fires arReady when the camera feed is live
     scene.addEventListener('arReady', succeed, { once: true });
@@ -2305,13 +2349,16 @@
     document.getElementById('ar-error').classList.remove('visible');
     scanAnim.classList.remove('hidden');
     document.body.style.overflow = '';
+    detachArSpinLoop();
     activeDroneRig = null;
-    activeDroneRoot = null;
     activeArScene = null;
+    droneModelReady = false;
+    droneYaw = 0;
+    dronePitch = 0;
     touchDrag.active = false;
     touchDrag.pending = false;
     pinchZoom.active = false;
-    autoSpinEnabled = true;
+    autoSpinEnabled = false;
     document.getElementById('target-badge').textContent = 'TARGET: SCANNING';
     setArHint('Fill the frame with the full poster — hold steady');
     arLaunching = false;
