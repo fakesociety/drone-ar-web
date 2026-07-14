@@ -150,6 +150,172 @@
             font-family: 'Inter', sans-serif;
         }
 
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .dashboard-slider {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(33, 134, 118, 0.42);
+            border-radius: 12px;
+            background: #0D1726;
+            box-shadow: 0 22px 70px rgba(13, 23, 38, 0.08);
+        }
+
+        .dashboard-slider-window {
+            position: relative;
+            aspect-ratio: 1918 / 900;
+            background: #0D1726;
+            overflow: hidden;
+        }
+
+        .dashboard-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+            background: #0D1726;
+            opacity: 0;
+            transform: scale(1.015);
+            transition: opacity 0.38s ease, transform 0.38s ease;
+        }
+
+        .dashboard-slide.is-active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .dashboard-slider-window::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(33, 134, 118, 0.12), transparent 34%);
+        }
+
+        .dashboard-slider-controls {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .dashboard-slider-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(143, 212, 201, 0.45);
+            border-radius: 50%;
+            background: rgba(13, 23, 38, 0.72);
+            color: #f8ffff;
+            font-size: 1.25rem;
+            line-height: 1;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .dashboard-slider-btn:hover {
+            background: rgba(33, 134, 118, 0.86);
+            border-color: rgba(248, 255, 255, 0.8);
+            transform: scale(1.04);
+        }
+
+        .dashboard-slider-caption {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+            min-height: 102px;
+            padding: 18px;
+            border-top: 1px solid rgba(33, 134, 118, 0.28);
+            background: linear-gradient(180deg, rgba(13, 23, 38, 0.96), rgba(13, 23, 38, 1));
+        }
+
+        .dashboard-slider-caption h3 {
+            font-size: 0.84rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            color: #f8ffff;
+        }
+
+        .dashboard-slider-caption p {
+            font-size: 0.76rem;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.78);
+            max-width: 720px;
+        }
+
+        .dashboard-slider-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .dashboard-slider-dot {
+            width: 9px;
+            height: 9px;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.28);
+            cursor: pointer;
+            transition: width 0.2s ease, background 0.2s ease;
+        }
+
+        .dashboard-slider-dot.is-active {
+            width: 28px;
+            background: #218676;
+        }
+
+        .dashboard-copy {
+            padding: 28px;
+            width: 100%;
+        }
+
+        .dashboard-copy p {
+            font-size: 0.82rem;
+            color: rgba(13, 23, 38, 0.7);
+            line-height: 1.75;
+        }
+
+        .dashboard-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .dashboard-stat {
+            padding: 14px;
+            border: 1px solid rgba(33, 134, 118, 0.28);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.42);
+        }
+
+        .dashboard-stat strong {
+            display: block;
+            font-family: 'Orbitron', monospace;
+            color: #218676;
+            font-size: 0.88rem;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-stat span {
+            display: block;
+            font-size: 0.68rem;
+            line-height: 1.45;
+            color: rgba(13, 23, 38, 0.62);
+        }
+
         /* ═══════════════════════════════════════
        NEON BUTTON
     ═══════════════════════════════════════ */
@@ -1026,6 +1192,34 @@
                 padding: 11px 22px;
                 font-size: 0.72rem;
             }
+
+            .dashboard-copy {
+                padding: 22px;
+            }
+
+            .dashboard-stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-slider-caption {
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-stat-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .dashboard-stat-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -1711,22 +1905,125 @@
                         VISUAL <span class="neon-glow">SLAM</span>
                     </h2>
                     <p style="margin-top:12px;font-size:0.82rem;color:rgba(13,23,38,0.7);max-width:520px;line-height:1.75;">
-                        This section will present how the drone builds a map of the environment and estimates its position
-                        without relying on GPS.
+                        The real-time SLAM system turns depth observations from the front, left, and right cameras into
+                        a continuously updated 2D occupancy grid. The map lets the drone separate unknown space, safe
+                        free space, and walls or obstacles while choosing where to explore next.
+                    </p>
+                    <p style="margin-top:12px;font-size:0.78rem;color:rgba(13,23,38,0.62);max-width:520px;line-height:1.75;">
+                        SLAM controls exploration and navigation; YOLO runs separately to confirm people and report their
+                        positions to the rescue logic.
                     </p>
                 </div>
-                <div class="glass-strong fade-in" data-d="2" style="min-height:260px;display:flex;align-items:center;justify-content:center;padding:30px;text-align:center;">
-                    <div>
-                        <div style="width:64px;height:64px;border:1px solid rgba(33,134,118,0.55);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;background:rgba(33,134,118,0.06);">
-                            <svg viewBox="0 0 28 28" width="27" height="27" fill="none" stroke="#218676" stroke-width="1.5">
-                                <path d="M4 22V8l7-3 7 3 6-3v14l-6 3-7-3-7 3z" /><path d="M11 5v14M18 8v14" />
-                                <circle cx="14" cy="13" r="2.5" fill="#218676" />
-                            </svg>
+                <div class="glass-strong fade-in" data-d="2" style="padding:24px;">
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;">
+                        <div style="padding:14px 10px;border:1px solid rgba(33,134,118,0.28);border-radius:8px;background:rgba(255,255,255,0.52);text-align:center;">
+                            <div class="font-orbitron" style="font-size:0.92rem;color:#218676;font-weight:800;">0.10 m</div>
+                            <div style="font-size:0.62rem;color:rgba(13,23,38,0.58);margin-top:4px;">Grid resolution</div>
                         </div>
-                        <p class="font-orbitron" style="font-size:0.72rem;color:#218676;font-weight:700;letter-spacing:0.14em;">CONTENT COMING NEXT</p>
-                        <p style="font-size:0.72rem;color:rgba(13,23,38,0.55);margin-top:7px;">Map visualization, localization pipeline, and implementation details.</p>
+                        <div style="padding:14px 10px;border:1px solid rgba(33,134,118,0.28);border-radius:8px;background:rgba(255,255,255,0.52);text-align:center;">
+                            <div class="font-orbitron" style="font-size:0.92rem;color:#218676;font-weight:800;">0.35</div>
+                            <div style="font-size:0.62rem;color:rgba(13,23,38,0.58);margin-top:4px;">Free threshold</div>
+                        </div>
+                        <div style="padding:14px 10px;border:1px solid rgba(33,134,118,0.28);border-radius:8px;background:rgba(255,255,255,0.52);text-align:center;">
+                            <div class="font-orbitron" style="font-size:0.92rem;color:#218676;font-weight:800;">0.65</div>
+                            <div style="font-size:0.62rem;color:rgba(13,23,38,0.58);margin-top:4px;">Occupied threshold</div>
+                        </div>
+                    </div>
+
+                    <div style="position:relative;overflow:hidden;border-radius:10px;border:1px solid rgba(33,134,118,0.18);background:#0D1726;aspect-ratio:16/7;margin-bottom:18px;">
+                        <svg viewBox="0 0 720 315" width="100%" height="100%" role="img" aria-label="Occupancy grid and frontier planning illustration">
+                            <defs>
+                                <pattern id="slamGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+                                    <path d="M24 0H0V24" fill="none" stroke="rgba(143,212,201,0.13)" stroke-width="1" />
+                                </pattern>
+                                <linearGradient id="slamRay" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0" stop-color="rgba(143,212,201,0.75)" />
+                                    <stop offset="1" stop-color="rgba(143,212,201,0.08)" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="720" height="315" fill="#0D1726" />
+                            <rect width="720" height="315" fill="url(#slamGrid)" />
+                            <path d="M86 250H418V212H520V88H360V132H222V74H86Z" fill="rgba(143,212,201,0.12)" stroke="rgba(143,212,201,0.45)" stroke-width="2" />
+                            <path d="M520 88H650V214H520Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.16)" stroke-dasharray="6 8" />
+                            <path d="M86 74H222V132H360V88H520" stroke="#8fd4c9" stroke-width="10" stroke-linecap="round" opacity="0.2" />
+                            <path d="M118 225L268 183L402 152L520 118" stroke="url(#slamRay)" stroke-width="3" />
+                            <path d="M118 225L284 224L418 212" stroke="url(#slamRay)" stroke-width="3" />
+                            <path d="M118 225L236 132L360 132" stroke="url(#slamRay)" stroke-width="3" />
+                            <circle cx="118" cy="225" r="13" fill="#218676" stroke="#dff8f4" stroke-width="3" />
+                            <path d="M118 213L128 236L118 231L108 236Z" fill="#dff8f4" />
+                            <g fill="#ff8d6b">
+                                <rect x="356" y="84" width="170" height="10" rx="3" />
+                                <rect x="516" y="88" width="10" height="130" rx="3" />
+                                <rect x="82" y="70" width="146" height="10" rx="3" />
+                            </g>
+                            <g fill="#8fd4c9">
+                                <circle cx="520" cy="118" r="7" />
+                                <circle cx="520" cy="178" r="7" />
+                                <circle cx="650" cy="148" r="7" />
+                            </g>
+                            <path d="M132 219C198 205 244 188 286 176C335 162 392 148 498 120" fill="none" stroke="#dff8f4" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 10" />
+                            <text x="28" y="38" fill="#8fd4c9" font-family="Orbitron, monospace" font-size="13" letter-spacing="2">LOG-ODDS MAP</text>
+                            <text x="548" y="250" fill="rgba(255,255,255,0.65)" font-family="Orbitron, monospace" font-size="11" letter-spacing="1.5">FRONTIER CANDIDATES</text>
+                        </svg>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="font-orbitron font-bold mb-3" style="font-size:0.82rem;color:#0D1726;">MAPPING PIPELINE</h3>
+                            <p style="font-size:0.76rem;color:rgba(13,23,38,0.72);line-height:1.72;">
+                                Depth pixels are projected into world space and written into a probabilistic occupancy grid.
+                                Free rays are drawn from the drone to visible surfaces, while surface hits become obstacles
+                                or walls. Safety inflation expands blocked areas so planned routes keep clearance.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="font-orbitron font-bold mb-3" style="font-size:0.82rem;color:#0D1726;">FRONTIER EXPLORATION</h3>
+                            <p style="font-size:0.76rem;color:rgba(13,23,38,0.72);line-height:1.72;">
+                                A frontier is a reachable free cell touching unknown space. Candidates are clustered and
+                                scored by unknown gain, clearance, direction, blacklist state, visited regions, and corridor
+                                preference before the best target is committed.
+                            </p>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mt-6">
+                <div class="glass p-5 fade-in" data-d="1">
+                    <span class="hud-badge">01</span>
+                    <h3 class="font-orbitron font-bold mt-4 mb-3" style="font-size:0.82rem;color:#218676;">REACHABLE TARGETS</h3>
+                    <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
+                        One BFS starts from the drone, so selected frontiers are reachable through the currently observed map.
+                    </p>
+                </div>
+                <div class="glass p-5 fade-in" data-d="2">
+                    <span class="hud-badge">02</span>
+                    <h3 class="font-orbitron font-bold mt-4 mb-3" style="font-size:0.82rem;color:#218676;">CLEAR A*</h3>
+                    <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
+                        Centered A* plans through known-free space, prefers wall clearance, and replans when new map data blocks the path.
+                    </p>
+                </div>
+                <div class="glass p-5 fade-in" data-d="3">
+                    <span class="hud-badge">03</span>
+                    <h3 class="font-orbitron font-bold mt-4 mb-3" style="font-size:0.82rem;color:#218676;">CORRIDOR LOGIC</h3>
+                    <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
+                        Corridor mode favors forward motion and side openings, extends targets deeper, and avoids unnecessary returns.
+                    </p>
+                </div>
+                <div class="glass p-5 fade-in" data-d="4">
+                    <span class="hud-badge">04</span>
+                    <h3 class="font-orbitron font-bold mt-4 mb-3" style="font-size:0.82rem;color:#218676;">RECOVERY</h3>
+                    <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
+                        Probes, blacklist recovery, low-gain recovery, and controlled backtracking keep exploration moving when frontiers fail.
+                    </p>
+                </div>
+            </div>
+
+            <div class="glass-strong fade-in mt-6" data-d="5" style="padding:20px;border-left:4px solid #218676;">
+                <p style="font-size:0.78rem;color:rgba(13,23,38,0.74);line-height:1.75;margin:0;">
+                    Coverage is measured from known cells against the expected mapped area. The mission finishes only when
+                    coverage is high enough and dynamically spawned people have been detected by the separate YOLO rescue pipeline.
+                </p>
             </div>
         </div>
     </section>
@@ -1736,29 +2033,64 @@
      ╚══════════════════════════════════════════╝ -->
     <section id="dashboard" class="py-24 px-5 grid-bg">
         <div style="max-width:1200px;margin:0 auto;">
-            <div class="grid md:grid-cols-[1.15fr_0.85fr] gap-8 items-center">
-                <div class="glass-strong fade-in" style="min-height:290px;padding:18px;">
-                    <div style="height:100%;min-height:254px;border:1px dashed rgba(33,134,118,0.45);border-radius:11px;background:rgba(13,23,38,0.035);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;">
-                        <div>
-                            <div style="display:flex;gap:7px;justify-content:center;margin-bottom:18px;">
-                                <span style="width:8px;height:8px;border-radius:50%;background:#218676;"></span>
-                                <span style="width:8px;height:8px;border-radius:50%;background:rgba(33,134,118,0.45);"></span>
-                                <span style="width:8px;height:8px;border-radius:50%;background:rgba(33,134,118,0.2);"></span>
-                            </div>
-                            <p class="font-orbitron" style="font-size:0.72rem;color:#218676;font-weight:700;letter-spacing:0.14em;">DASHBOARD PREVIEW</p>
-                            <p style="font-size:0.72rem;color:rgba(13,23,38,0.55);margin-top:8px;">Interface screenshots and live mission data will be added here.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="fade-in" data-d="2">
+            <div class="dashboard-layout">
+                <div class="glass-strong dashboard-copy fade-in" data-d="1">
                     <span class="section-label">// Mission Monitoring</span>
                     <h2 class="font-orbitron font-bold mt-1" style="font-size:clamp(1.7rem,4vw,2.6rem);">
                         MISSION <span class="neon-glow">DASHBOARD</span>
                     </h2>
-                    <p style="margin-top:12px;font-size:0.82rem;color:rgba(13,23,38,0.7);max-width:520px;line-height:1.75;">
-                        This section will showcase the dashboard used to monitor the autonomous mission, visualize system
-                        data, and follow the drone's operation in real time.
+                    <p style="margin-top:12px;">
+                        The dashboard is the mission control layer for the 3D Drone RL project. It brings together the
+                        Isaac Sim environment, PPO navigation policy, SLAM mapping, camera streams, YOLO rescue detection,
+                        and recorded flight telemetry into one operator view.
                     </p>
+                    <p style="margin-top:12px;">
+                        During a run, the interface makes it possible to follow how the autonomous drone understands the
+                        room, avoids obstacles, searches unexplored frontiers, identifies people, and stores every mission
+                        frame for later review.
+                    </p>
+                    <div class="dashboard-stat-grid">
+                        <div class="dashboard-stat">
+                            <strong>SLAM</strong>
+                            <span>3D map, 2D radar, frontiers, goal distance, and explored coverage.</span>
+                        </div>
+                        <div class="dashboard-stat">
+                            <strong>PPO + AE</strong>
+                            <span>Navigation policy driven by depth perception and compact latent features.</span>
+                        </div>
+                        <div class="dashboard-stat">
+                            <strong>YOLO v11</strong>
+                            <span>Person detection with confidence tracking and rescue log confirmation.</span>
+                        </div>
+                        <div class="dashboard-stat">
+                            <strong>Replay</strong>
+                            <span>JSONL archive review with synchronized mission telemetry and frames.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-slider fade-in" data-dashboard-slider>
+                    <div class="dashboard-slider-window">
+                        <img class="dashboard-slide is-active" src="Assets/dashboard/slam-map.png" alt="Live 3D SLAM dashboard with drone position, obstacles, goal, and radar telemetry" data-title="3D SLAM Map" data-description="Live spatial awareness layer showing explored walls, obstacles, drone pose, detected person, goal marker, and a compact 2D radar view.">
+                        <img class="dashboard-slide" src="Assets/dashboard/camera-feeds.png" alt="Multi-camera dashboard with front, rear, left, right, depth, saliency, and autoencoder reconstruction feeds" data-title="Camera Feeds" data-description="Front, rear, port, and starboard views paired with depth input, saliency heatmap, and AE reconstruction for model explainability.">
+                        <img class="dashboard-slide" src="Assets/dashboard/navigation-control.png" alt="PPO navigation dashboard with motor command charts and 3D navigation map" data-title="PPO Navigation" data-description="Control telemetry for body velocity, desired motion, yaw, altitude, motor commands, and corridor-level route planning.">
+                        <img class="dashboard-slide" src="Assets/dashboard/yolo-detection.png" alt="YOLO detection dashboard showing human detection confidence and rescue log" data-title="YOLO Detection" data-description="Rescue pipeline view that tracks human detections, confidence threshold, captured frames, and room-level rescue log entries.">
+                        <img class="dashboard-slide" src="Assets/dashboard/recordings-review.png" alt="Flight data review dashboard with replay timeline and telemetry graph" data-title="Recordings Review" data-description="Replay interface for JSONL flight logs, telemetry timelines, mission elapsed time, frames, map coverage, and crash status.">
+                        <div class="dashboard-slider-controls" aria-label="Dashboard screenshot navigation">
+                            <button class="dashboard-slider-btn" type="button" data-dashboard-prev aria-label="Previous dashboard screenshot">‹</button>
+                            <button class="dashboard-slider-btn" type="button" data-dashboard-next aria-label="Next dashboard screenshot">›</button>
+                        </div>
+                    </div>
+                    <div class="dashboard-slider-caption">
+                        <h3 class="font-orbitron" data-dashboard-title>3D SLAM Map</h3>
+                        <p data-dashboard-description>Live spatial awareness layer showing explored walls, obstacles, drone pose, detected person, goal marker, and a compact 2D radar view.</p>
+                        <div class="dashboard-slider-dots" aria-label="Dashboard screenshot slides">
+                            <button class="dashboard-slider-dot is-active" type="button" data-dashboard-dot="0" aria-label="Show 3D SLAM Map"></button>
+                            <button class="dashboard-slider-dot" type="button" data-dashboard-dot="1" aria-label="Show Camera Feeds"></button>
+                            <button class="dashboard-slider-dot" type="button" data-dashboard-dot="2" aria-label="Show PPO Navigation"></button>
+                            <button class="dashboard-slider-dot" type="button" data-dashboard-dot="3" aria-label="Show YOLO Detection"></button>
+                            <button class="dashboard-slider-dot" type="button" data-dashboard-dot="4" aria-label="Show Recordings Review"></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1850,6 +2182,53 @@
         }, { threshold: 0.12 });
 
         document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+        /* ── DASHBOARD AUTO SLIDER ── */
+        (() => {
+            const slider = document.querySelector('[data-dashboard-slider]');
+            if (!slider) return;
+
+            const slides = Array.from(slider.querySelectorAll('.dashboard-slide'));
+            const dots = Array.from(slider.querySelectorAll('[data-dashboard-dot]'));
+            const title = slider.querySelector('[data-dashboard-title]');
+            const description = slider.querySelector('[data-dashboard-description]');
+            const prev = slider.querySelector('[data-dashboard-prev]');
+            const next = slider.querySelector('[data-dashboard-next]');
+            let active = 0;
+            let timer;
+
+            const showSlide = (index) => {
+                active = (index + slides.length) % slides.length;
+                slides.forEach((slide, i) => slide.classList.toggle('is-active', i === active));
+                dots.forEach((dot, i) => dot.classList.toggle('is-active', i === active));
+                title.textContent = slides[active].dataset.title;
+                description.textContent = slides[active].dataset.description;
+            };
+
+            const start = () => {
+                window.clearInterval(timer);
+                timer = window.setInterval(() => showSlide(active + 1), 1000);
+            };
+
+            prev.addEventListener('click', () => {
+                showSlide(active - 1);
+                start();
+            });
+
+            next.addEventListener('click', () => {
+                showSlide(active + 1);
+                start();
+            });
+
+            dots.forEach((dot) => {
+                dot.addEventListener('click', () => {
+                    showSlide(Number(dot.dataset.dashboardDot));
+                    start();
+                });
+            });
+
+            start();
+        })();
 
         /* ── NUMBER COUNTER ANIMATION ── */
         function animateNum(el, target) {
