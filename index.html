@@ -1337,8 +1337,12 @@
        RESPONSIVE
     ═══════════════════════════════════════ */
         @media (max-width: 640px) {
+            .hero-content {
+                transform: translateY(-28px);
+            }
+
             .hero-copy h1 {
-                margin-bottom: 1.5rem;
+                margin-bottom: 1.85rem;
                 font-size: 1.76rem !important;
                 line-height: 1.16;
             }
@@ -1349,11 +1353,11 @@
             }
 
             .hero-copy .hero-affiliation {
-                margin-bottom: 0.8rem;
+                margin-bottom: 1.05rem;
             }
 
             .hero-copy .hero-advisor {
-                margin-bottom: 1.8rem;
+                margin-bottom: 2.15rem;
             }
 
             .hero-copy .hero-summary {
@@ -1495,13 +1499,10 @@
      ║           LOADING SCREEN                ║
      ╚══════════════════════════════════════════╝ -->
     <div id="loading-screen">
-        <p class="font-orbitron text-[0.65rem] tracking-[0.45em] neon mb-2">INITIALIZING SYSTEMS</p>
         <p class="font-orbitron text-2xl font-black neon-glow">DRONE RL</p>
         <div class="load-track">
             <div class="load-fill"></div>
         </div>
-        <p class="text-[0.65rem] text-gray-700 mt-4 tracking-widest font-orbitron">RUPPIN ACADEMIC CENTER · AI &amp;
-            DATA SCIENCE</p>
     </div>
 
 
@@ -1681,7 +1682,7 @@
 
 
 
-        <div style="max-width:1100px;width:100%;position:relative;z-index:2;">
+        <div class="hero-content" style="max-width:1100px;width:100%;position:relative;z-index:2;">
             <div class="grid md:grid-cols-2 gap-12 items-center">
 
                 <!-- ── Left: Text ── -->
@@ -2311,28 +2312,23 @@
                     <div class="dashboard-slider-window">
                         <img class="dashboard-slide is-active" src="Assets/dashboard/slam-map.png"
                             alt="Live 3D SLAM dashboard with drone position, obstacles, goal, and radar telemetry"
-                            loading="lazy" decoding="async"
-                            data-title="3D SLAM Map"
+                            loading="lazy" decoding="async" data-title="3D SLAM Map"
                             data-description="Live spatial awareness layer showing explored walls, obstacles, drone pose, detected person, goal marker, and a compact 2D radar view.">
                         <img class="dashboard-slide" src="Assets/dashboard/camera-feeds.png"
                             alt="Multi-camera dashboard with front, rear, left, right, depth, saliency, and autoencoder reconstruction feeds"
-                            loading="lazy" decoding="async"
-                            data-title="Camera Feeds"
+                            loading="lazy" decoding="async" data-title="Camera Feeds"
                             data-description="Front, right, left, and third person views paired with depth input, saliency heatmap, and AE reconstruction for model explainability.">
                         <img class="dashboard-slide" src="Assets/dashboard/navigation-control.png"
                             alt="PPO navigation dashboard with motor command charts and 3D navigation map"
-                            loading="lazy" decoding="async"
-                            data-title="PPO Navigation"
+                            loading="lazy" decoding="async" data-title="PPO Navigation"
                             data-description="Control telemetry for body velocity, desired motion, yaw, altitude, motor commands, and corridor-level route planning.">
                         <img class="dashboard-slide" src="Assets/dashboard/yolo-detection.png"
                             alt="YOLO detection dashboard showing human detection confidence and rescue log"
-                            loading="lazy" decoding="async"
-                            data-title="YOLO Detection"
+                            loading="lazy" decoding="async" data-title="YOLO Detection"
                             data-description="Rescue pipeline view that tracks human detections, confidence threshold, captured frames, and room-level rescue log entries.">
                         <img class="dashboard-slide" src="Assets/dashboard/recordings-review.png"
-                            alt="Flight data review dashboard with replay timeline and telemetry graph"
-                            loading="lazy" decoding="async"
-                            data-title="Recordings Review"
+                            alt="Flight data review dashboard with replay timeline and telemetry graph" loading="lazy"
+                            decoding="async" data-title="Recordings Review"
                             data-description="Replay interface for JSONL flight logs, telemetry timelines, mission elapsed time, frames, map coverage, and crash status.">
                         <div class="dashboard-slider-controls" aria-label="Dashboard screenshot navigation">
                             <button class="dashboard-slider-btn" type="button" data-dashboard-prev
