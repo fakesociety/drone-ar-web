@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description"
-        content="Autonomous Drone Navigation based on Deep Reinforcement Learning — Ruppin Academic Center, AI & Data Science. NVIDIA Isaac Sim, PPO, YOLO v11.">
+        content="Autonomous Drone Navigation based on Deep Reinforcement Learning - Ruppin Academic Center, AI & Data Science. NVIDIA Isaac Sim, PPO, YOLO v11.">
     <meta name="theme-color" content="#EBF0F0">
     <title>DRL Drone Navigation | Ruppin Academic Center</title>
     <link rel="preload" href="white_drone.glb" as="fetch" crossorigin="anonymous">
@@ -160,15 +160,15 @@
         .dashboard-slider {
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(33, 134, 118, 0.42);
-            border-radius: 12px;
-            background: #0D1726;
-            box-shadow: 0 22px 70px rgba(13, 23, 38, 0.08);
+            border: 1px solid rgba(33, 134, 118, 0.6);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: none;
         }
 
         .dashboard-slider-window {
             position: relative;
-            aspect-ratio: 1918 / 900;
+            aspect-ratio: 16 / 9;
             background: #0D1726;
             overflow: hidden;
         }
@@ -233,11 +233,11 @@
         .dashboard-slider-caption {
             position: relative;
             z-index: 1;
-            color: #fff;
-            min-height: 102px;
-            padding: 18px;
-            border-top: 1px solid rgba(33, 134, 118, 0.28);
-            background: linear-gradient(180deg, rgba(13, 23, 38, 0.96), rgba(13, 23, 38, 1));
+            color: #0D1726;
+            min-height: 0;
+            padding: 16px;
+            border-top: 0;
+            background: transparent;
         }
 
         .dashboard-slider-caption h3 {
@@ -245,13 +245,13 @@
             letter-spacing: 0.14em;
             text-transform: uppercase;
             margin-bottom: 6px;
-            color: #f8ffff;
+            color: rgba(13, 23, 38, 1);
         }
 
         .dashboard-slider-caption p {
             font-size: 0.76rem;
             line-height: 1.55;
-            color: rgba(255, 255, 255, 0.78);
+            color: rgba(13, 23, 38, 0.7);
             max-width: 720px;
         }
 
@@ -266,7 +266,7 @@
             height: 9px;
             border: 0;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.28);
+            background: rgba(13, 23, 38, 0.2);
             cursor: pointer;
             transition: width 0.2s ease, background 0.2s ease;
         }
@@ -1055,7 +1055,7 @@
             z-index: 1 !important;
         }
 
-        /* MindAR appends camera <video> to <body> — relocate into #ar-scene-wrap ASAP */
+        /* MindAR appends camera <video> to <body> - relocate into #ar-scene-wrap ASAP */
         body>video {
             position: fixed !important;
             inset: 0 !important;
@@ -1380,12 +1380,53 @@
             .stable-flight-media {
                 width: 100%;
                 max-width: 300px;
-                justify-self: center;
+                justify-self: end;
             }
 
             .human-detection-media {
                 width: 66.666%;
-                justify-self: center;
+                justify-self: end;
+            }
+
+            .slam-content-layout {
+                align-items: stretch;
+            }
+
+            .slam-step-grid {
+                order: 1;
+            }
+
+            .slam-video-card {
+                order: 2;
+                height: 100%;
+                min-width: 0;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .slam-video-card .vid-thumb {
+                position: relative;
+                flex: 1 1 0;
+                height: 0;
+                min-height: 0;
+                aspect-ratio: auto;
+            }
+
+            .slam-video-card .vid-thumb video {
+                position: absolute;
+                inset: 0;
+            }
+
+        }
+
+        @media (max-width: 1023px) {
+            .slam-video-card {
+                order: 1;
+            }
+
+            .slam-step-grid {
+                order: 2;
             }
         }
     </style>
@@ -1462,7 +1503,7 @@
                 style="position:absolute;bottom:0;left:0;right:0;padding:28px 20px;text-align:center;pointer-events:none;">
                 <p id="ar-hint"
                     style="font-family:'Orbitron',monospace;font-size:0.58rem;color:rgba(33, 134, 118, 0.85);letter-spacing:0.22em;text-transform:uppercase;">
-                    Fill the frame with the full poster — hold steady
+                    Fill the frame with the full poster - hold steady
                 </p>
             </div>
             <!-- Drone play controls -->
@@ -1632,57 +1673,10 @@
                         </div>
 
                         <!-- Drone SVG Illustration -->
-                        <div class="drone-float"
+                        <div
                             style="width:100%;aspect-ratio:4/3;background:rgba(91,107,118,0.05);border-radius:10px;border:1px solid rgba(33, 134, 118, 0.1);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;">
-                            <svg viewBox="0 0 220 165" width="90%" style="position:relative;z-index:1;">
-                                <!-- Arms -->
-                                <line x1="110" y1="82" x2="42" y2="52" stroke="rgba(33, 134, 118, 0.85)"
-                                    stroke-width="2.5" />
-                                <line x1="110" y1="82" x2="178" y2="52" stroke="rgba(33, 134, 118, 0.85)"
-                                    stroke-width="2.5" />
-                                <line x1="110" y1="82" x2="42" y2="112" stroke="rgba(33, 134, 118, 0.85)"
-                                    stroke-width="2.5" />
-                                <line x1="110" y1="82" x2="178" y2="112" stroke="rgba(33, 134, 118, 0.85)"
-                                    stroke-width="2.5" />
-                                <!-- Rotor halos -->
-                                <ellipse cx="42" cy="52" rx="24" ry="6" fill="none" stroke="#218676" stroke-width="1.5"
-                                    opacity="0.7" />
-                                <ellipse cx="178" cy="52" rx="24" ry="6" fill="none" stroke="#218676" stroke-width="1.5"
-                                    opacity="0.7" />
-                                <ellipse cx="42" cy="112" rx="24" ry="6" fill="none" stroke="#218676" stroke-width="1.5"
-                                    opacity="0.7" />
-                                <ellipse cx="178" cy="112" rx="24" ry="6" fill="none" stroke="#218676"
-                                    stroke-width="1.5" opacity="0.7" />
-                                <!-- Motor hubs -->
-                                <circle cx="42" cy="52" r="5" fill="rgba(33, 134, 118, 0.6)" stroke="#218676"
-                                    stroke-width="1.2" />
-                                <circle cx="178" cy="52" r="5" fill="rgba(33, 134, 118, 0.6)" stroke="#218676"
-                                    stroke-width="1.2" />
-                                <circle cx="42" cy="112" r="5" fill="rgba(33, 134, 118, 0.6)" stroke="#218676"
-                                    stroke-width="1.2" />
-                                <circle cx="178" cy="112" r="5" fill="rgba(33, 134, 118, 0.6)" stroke="#218676"
-                                    stroke-width="1.2" />
-                                <!-- Body frame -->
-                                <rect x="96" y="70" width="28" height="24" rx="5" fill="rgba(33, 134, 118, 0.6)"
-                                    stroke="#218676" stroke-width="1.5" />
-                                <!-- Center cross -->
-                                <circle cx="110" cy="82" r="4" fill="#218676" />
-                                <!-- Camera dome -->
-                                <circle cx="110" cy="98" r="7" fill="rgba(99, 149, 142,0.2)" stroke="#63958E"
-                                    stroke-width="1.2" />
-                                <circle cx="110" cy="98" r="3.5" fill="rgba(99, 149, 142,0.5)" />
-                                <!-- LiDAR scan lines -->
-                                <line x1="110" y1="105" x2="76" y2="148" stroke="rgba(99, 149, 142,0.25)"
-                                    stroke-width="1" />
-                                <line x1="110" y1="105" x2="144" y2="148" stroke="rgba(99, 149, 142,0.25)"
-                                    stroke-width="1" />
-                                <!-- Ground return dots -->
-                                <circle cx="82" cy="140" r="2" fill="rgba(99, 149, 142,0.65)" />
-                                <circle cx="95" cy="150" r="1.5" fill="rgba(99, 149, 142,0.5)" />
-                                <circle cx="112" cy="153" r="2" fill="rgba(99, 149, 142,0.65)" />
-                                <circle cx="128" cy="147" r="1.5" fill="rgba(99, 149, 142,0.5)" />
-                                <circle cx="138" cy="141" r="2" fill="rgba(99, 149, 142,0.65)" />
-                            </svg>
+                            <img src="Assets/Drone.svg" alt="Animated drone" width="500" height="500"
+                                style="width:100%;height:100%;display:block;object-fit:contain;position:relative;z-index:1;">
                             <!-- Corner marks on image box -->
                             <div
                                 style="position:absolute;top:5px;left:5px;width:10px;height:10px;border-top:2px solid rgba(33, 134, 118, 0.85);border-left:2px solid rgba(33, 134, 118, 0.85);">
@@ -1720,7 +1714,7 @@
     <!-- ╔══════════════════════════════════════════╗
      ║             TEAM SECTION                ║
      ╚══════════════════════════════════════════╝ -->
-    <section id="team" class="py-24 px-5 grid-bg">
+    <section id="team" class="py-24 px-5">
         <div style="max-width:1200px;margin:0 auto;">
 
             <div class="text-center mb-8 fade-in">
@@ -1896,17 +1890,15 @@
             </div>
 
             <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-6 items-stretch">
-                <div class="glass p-5 fade-in" data-d="1">
-                    <div
-                        style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;">
-                        <h3 class="font-orbitron text-[0.72rem] font-bold tracking-widest" style="color:#0D1726;">DEPTH
-                            IMAGE</h3>
-                    </div>
-                    <div
-                        style="position:relative;overflow:hidden;border-radius:10px;background:#111820;aspect-ratio:16/9;">
+                <div class="vid-card glass fade-in" data-d="1">
+                    <div class="vid-thumb" style="background:#0D1726;">
                         <img src="Assets/perception/Depth.png"
                             alt="Grayscale depth frame showing corridor geometry and obstacle distance" loading="lazy"
-                            style="width:100%;height:100%;object-fit:contain;display:block;background:#111820;">
+                            style="width:100%;height:100%;object-fit:contain;display:block;background:#0D1726;">
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-orbitron text-[0.82rem] font-bold" style="color:rgba(13,23,38,1);">Depth
+                            Image</h4>
                     </div>
                 </div>
 
@@ -2012,13 +2004,16 @@
                         <span class="hidden lg:inline">→</span><span class="lg:hidden">↓</span>
                     </div>
 
-                    <div class="stable-flight-media" style="text-align:center;padding:5px 1px;">
-                        <video src="Assets/third_person.mp4" autoplay loop muted playsinline preload="metadata"
-                            aria-label="Third-person view of the autonomous drone in stable flight"
-                            style="width:100%;aspect-ratio:16/9;display:block;margin:0 auto 10px;border-radius:8px;background:#0D1726;object-fit:cover;"></video>
-                        <p class="font-orbitron"
-                            style="font-size:0.7rem;font-weight:700;color:#0D1726;letter-spacing:0.1em;">STABLE FLIGHT
-                        </p>
+                    <div class="stable-flight-media vid-card glass">
+                        <div class="vid-thumb" style="background:#0D1726;">
+                            <video src="Assets/third_person.mp4" autoplay loop muted playsinline preload="metadata"
+                                aria-label="Third-person view of the autonomous drone in stable flight"
+                                style="width:100%;height:100%;display:block;background:#0D1726;object-fit:cover;"></video>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-orbitron text-[0.82rem] font-bold" style="color:rgba(13,23,38,1);">Stable
+                                Flight</h4>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2047,13 +2042,17 @@
                     </p>
                 </div>
 
-                <figure class="human-detection-media glass fade-in" data-d="2" style="padding:8px;overflow:hidden;">
-                    <video src="Assets/human_detection.mp4" autoplay loop muted playsinline preload="metadata"
-                        aria-label="YOLOv11 detecting a human in the simulated environment"
-                        style="width:100%;display:block;border-radius:9px;background:#0D1726;object-fit:cover;"></video>
-                    <figcaption
-                        style="padding:10px 8px 4px;font-size:0.68rem;color:rgba(13,23,38,0.58);text-align:center;">
-                        Example of YOLOv11 human detection in the simulated environment
+                <figure class="human-detection-media vid-card glass fade-in" data-d="2">
+                    <div class="vid-thumb" style="background:#0D1726;">
+                        <video src="Assets/human_detection.mp4" autoplay loop muted playsinline preload="metadata"
+                            aria-label="YOLOv11 detecting a human in the simulated environment"
+                            style="width:100%;height:100%;display:block;background:#0D1726;object-fit:cover;"></video>
+                    </div>
+                    <figcaption class="p-4">
+                        <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(13,23,38,1);">Human
+                            Detection</h4>
+                        <p style="font-size:0.76rem;color:rgba(13,23,38,0.7);line-height:1.6;">YOLOv11 detection in
+                            the simulated environment.</p>
                     </figcaption>
                 </figure>
             </div>
@@ -2063,113 +2062,87 @@
     <!-- ╔══════════════════════════════════════════╗
      ║               VISUAL SLAM                ║
      ╚══════════════════════════════════════════╝ -->
-    <section id="slam" class="py-24 px-5">
+    <section id="slam" class="py-24 px-5 grid-bg">
         <div style="max-width:1200px;margin:0 auto;">
-            <div class="grid md:grid-cols-[0.85fr_1.15fr] gap-8 items-center">
-                <div class="fade-in">
-                    <h2 class="font-orbitron font-bold mt-1" style="font-size:clamp(1.7rem,4vw,2.6rem);">
-                        VISUAL <span class="neon-glow">SLAM</span>
-                    </h2>
-                    <p
-                        style="margin-top:12px;font-size:0.82rem;color:rgba(13,23,38,0.7);max-width:520px;line-height:1.75;">
-                        The real-time SLAM system turns depth observations from the front, left, and right cameras into
-                        a continuously updated 2D occupancy grid. The map lets the drone separate unknown space, safe
-                        free space, and walls or obstacles while choosing where to explore next.
-                    </p>
-                </div>
-
-
-                <div
-                    style="position:relative;overflow:hidden;border-radius:10px;border:1px solid rgba(33,134,118,0.18);background:#0D1726;aspect-ratio:16/7;margin-bottom:18px;">
-                    <svg viewBox="0 0 720 315" width="100%" height="100%" role="img"
-                        aria-label="Occupancy grid and frontier planning illustration">
-                        <defs>
-                            <pattern id="slamGrid" width="24" height="24" patternUnits="userSpaceOnUse">
-                                <path d="M24 0H0V24" fill="none" stroke="rgba(143,212,201,0.13)" stroke-width="1" />
-                            </pattern>
-                            <linearGradient id="slamRay" x1="0" y1="0" x2="1" y2="0">
-                                <stop offset="0" stop-color="rgba(143,212,201,0.75)" />
-                                <stop offset="1" stop-color="rgba(143,212,201,0.08)" />
-                            </linearGradient>
-                        </defs>
-                        <rect width="720" height="315" fill="#0D1726" />
-                        <rect width="720" height="315" fill="url(#slamGrid)" />
-                        <path d="M86 250H418V212H520V88H360V132H222V74H86Z" fill="rgba(143,212,201,0.12)"
-                            stroke="rgba(143,212,201,0.45)" stroke-width="2" />
-                        <path d="M520 88H650V214H520Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.16)"
-                            stroke-dasharray="6 8" />
-                        <path d="M86 74H222V132H360V88H520" stroke="#8fd4c9" stroke-width="10" stroke-linecap="round"
-                            opacity="0.2" />
-                        <path d="M118 225L268 183L402 152L520 118" stroke="url(#slamRay)" stroke-width="3" />
-                        <path d="M118 225L284 224L418 212" stroke="url(#slamRay)" stroke-width="3" />
-                        <path d="M118 225L236 132L360 132" stroke="url(#slamRay)" stroke-width="3" />
-                        <circle cx="118" cy="225" r="13" fill="#218676" stroke="#dff8f4" stroke-width="3" />
-                        <path d="M118 213L128 236L118 231L108 236Z" fill="#dff8f4" />
-                        <g fill="#ff8d6b">
-                            <rect x="356" y="84" width="170" height="10" rx="3" />
-                            <rect x="516" y="88" width="10" height="130" rx="3" />
-                            <rect x="82" y="70" width="146" height="10" rx="3" />
-                        </g>
-                        <g fill="#8fd4c9">
-                            <circle cx="520" cy="118" r="7" />
-                            <circle cx="520" cy="178" r="7" />
-                            <circle cx="650" cy="148" r="7" />
-                        </g>
-                        <path d="M132 219C198 205 244 188 286 176C335 162 392 148 498 120" fill="none" stroke="#dff8f4"
-                            stroke-width="4" stroke-linecap="round" stroke-dasharray="1 10" />
-                        <text x="28" y="38" fill="#8fd4c9" font-family="Orbitron, monospace" font-size="13"
-                            letter-spacing="2">LOG-ODDS MAP</text>
-                        <text x="548" y="250" fill="rgba(255,255,255,0.65)" font-family="Orbitron, monospace"
-                            font-size="11" letter-spacing="1.5">FRONTIER CANDIDATES</text>
-                    </svg>
-                </div>
-
-            </div>
-
-            <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mt-6">
-                <div class="glass p-5 fade-in" data-d="1">
-                    <span class="hud-badge">01</span>
-                    <h3 class="font-orbitron font-bold mt-4 mb-3" style="font-size:0.82rem;color:#218676;">REACHABLE
-                        TARGETS</h3>
-                    <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
-                        One BFS starts from the drone, so selected frontiers are reachable through the currently
-                        observed map.
-                    </p>
-                </div>
-                <div class="glass p-5 fade-in" data-d="2">
-                    <span class="hud-badge">02</span>
-                    <h3 class="font-orbitron font-bold mt-4 mb-3" style="font-size:0.82rem;color:#218676;">CLEAR A*</h3>
-                    <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
-                        Centered A* plans through known-free space, prefers wall clearance, and replans when new map
-                        data blocks the path.
-                    </p>
-                </div>
-                <div class="glass p-5 fade-in" data-d="3">
-                    <span class="hud-badge">03</span>
-                    <h3 class="font-orbitron font-bold mt-4 mb-3" style="font-size:0.82rem;color:#218676;">CORRIDOR
-                        LOGIC</h3>
-                    <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
-                        Corridor mode favors forward motion and side openings, extends targets deeper, and avoids
-                        unnecessary returns.
-                    </p>
-                </div>
-                <div class="glass p-5 fade-in" data-d="4">
-                    <span class="hud-badge">04</span>
-                    <h3 class="font-orbitron font-bold mt-4 mb-3" style="font-size:0.82rem;color:#218676;">RECOVERY</h3>
-                    <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
-                        Probes, blacklist recovery, low-gain recovery, and controlled backtracking keep exploration
-                        moving when frontiers fail.
-                    </p>
-                </div>
-            </div>
-
-            <div class="glass-strong fade-in mt-6" data-d="5" style="padding:20px;border-left:4px solid #218676;">
-                <p style="font-size:0.78rem;color:rgba(13,23,38,0.74);line-height:1.75;margin:0;">
-                    Coverage is measured from known cells against the expected mapped area. The mission finishes only
-                    when
-                    coverage is high enough and dynamically spawned people have been detected by the separate YOLO
-                    rescue pipeline.
+            <div class="fade-in mb-12">
+                <h2 class="font-orbitron font-bold mt-1" style="font-size:clamp(1.7rem,4vw,2.6rem);">
+                    VISUAL <span class="neon-glow">SLAM</span>
+                </h2>
+                <p style="margin-top:12px;font-size:0.82rem;color:rgba(13,23,38,0.7);max-width:760px;line-height:1.75;">
+                    The drone builds a live map as it moves. The real-time SLAM system turns depth observations from
+                    the front, left, and right cameras into a continuously updated 2D occupancy grid. The map lets
+                    the drone separate unknown space, safe free space, and walls or obstacles while choosing where
+                    to explore next.
                 </p>
+            </div>
+
+            <div class="slam-content-layout grid lg:grid-cols-2 gap-8 items-center">
+                <div class="slam-step-grid grid sm:grid-cols-2 gap-4">
+                    <div class="glass p-5 fade-in" data-d="1">
+                        <div
+                            style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;">
+                            <h3 class="font-orbitron font-bold" style="font-size:0.82rem;color:#218676;">SENSE</h3>
+                            <h3 class="font-orbitron font-bold" style="font-size:0.82rem;color:#218676;">01</h3>
+                        </div>
+                        <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
+                            Front, left, and right depth cameras capture the surrounding space throughout the flight.
+                        </p>
+                    </div>
+
+                    <div class="glass p-5 fade-in" data-d="2">
+                        <div
+                            style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;">
+                            <h3 class="font-orbitron font-bold" style="font-size:0.82rem;color:#218676;">BUILD THE MAP
+                            </h3>
+                            <h3 class="font-orbitron font-bold" style="font-size:0.82rem;color:#218676;">02</h3>
+                        </div>
+                        <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
+                            Depth measurements are projected into a probabilistic 2D occupancy grid of free space,
+                            walls, obstacles, and unknown areas.
+                        </p>
+                    </div>
+
+                    <div class="glass p-5 fade-in" data-d="3">
+                        <div
+                            style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;">
+                            <h3 class="font-orbitron font-bold" style="font-size:0.82rem;color:#218676;">CHOOSE WHERE TO
+                                EXPLORE</h3>
+                            <h3 class="font-orbitron font-bold" style="font-size:0.82rem;color:#218676;">03</h3>
+                        </div>
+                        <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
+                            The system detects frontiers (the boundary between mapped and unmapped space) and ranks
+                            them by information gain and travel distance.
+                        </p>
+                    </div>
+
+                    <div class="glass p-5 fade-in" data-d="4">
+                        <div
+                            style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;">
+                            <h3 class="font-orbitron font-bold" style="font-size:0.82rem;color:#218676;">PLAN, FLY,
+                                REPEAT</h3>
+                            <h3 class="font-orbitron font-bold" style="font-size:0.82rem;color:#218676;">04</h3>
+                        </div>
+                        <p style="font-size:0.74rem;color:rgba(13,23,38,0.72);line-height:1.65;">
+                            A* generates a clearance-aware path through known-free space. The PPO navigator follows
+                            its waypoints while the map and route update continuously.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="slam-video-card vid-card glass fade-in" data-d="2">
+                    <div class="vid-thumb" style="background:#0D1726;">
+                        <video src="Assets/VISUAL_SLAM.mp4" autoplay loop muted playsinline preload="metadata"
+                            aria-label="Live visual SLAM mapping and exploration"
+                            style="width:100%;height:100%;display:block;background:#0D1726;object-fit:cover;"></video>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-orbitron text-[0.82rem] font-bold mb-2" style="color:rgba(13,23,38,1);">Live
+                            SLAM Mapping</h4>
+                        <p style="font-size:0.76rem;color:rgba(13,23,38,0.7);line-height:1.6;">
+                            Real-time mapping, localization, and frontier-based exploration.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -2177,10 +2150,10 @@
     <!-- ╔══════════════════════════════════════════╗
      ║             MISSION DASHBOARD            ║
      ╚══════════════════════════════════════════╝ -->
-    <section id="dashboard" class="py-24 px-5 grid-bg">
+    <section id="dashboard" class="py-24 px-5">
         <div style="max-width:1200px;margin:0 auto;">
             <div class="dashboard-layout">
-                <div class="glass-strong dashboard-copy fade-in" data-d="1">
+                <div class="dashboard-copy fade-in" data-d="1">
                     <h2 class="font-orbitron font-bold mt-1" style="font-size:clamp(1.7rem,4vw,2.6rem);">
                         MISSION <span class="neon-glow">DASHBOARD</span>
                     </h2>
@@ -2196,26 +2169,8 @@
                         mission
                         frame for later review.
                     </p>
-                    <div class="dashboard-stat-grid">
-                        <div class="dashboard-stat">
-                            <strong>SLAM</strong>
-                            <span>3D map, 2D radar, frontiers, goal distance, and explored coverage.</span>
-                        </div>
-                        <div class="dashboard-stat">
-                            <strong>PPO + AE</strong>
-                            <span>Navigation policy driven by depth perception and compact latent features.</span>
-                        </div>
-                        <div class="dashboard-stat">
-                            <strong>YOLO v11</strong>
-                            <span>Person detection with confidence tracking and rescue log confirmation.</span>
-                        </div>
-                        <div class="dashboard-stat">
-                            <strong>Replay</strong>
-                            <span>JSONL archive review with synchronized mission telemetry and frames.</span>
-                        </div>
-                    </div>
                 </div>
-                <div class="dashboard-slider fade-in" data-dashboard-slider>
+                <div class="dashboard-slider vid-card glass fade-in" data-dashboard-slider>
                     <div class="dashboard-slider-window">
                         <img class="dashboard-slide is-active" src="Assets/dashboard/slam-map.png"
                             alt="Live 3D SLAM dashboard with drone position, obstacles, goal, and radar telemetry"
@@ -2466,7 +2421,7 @@
            prompt fires immediately and the WebGL canvas is correctly sized.
         ──────────────────────────────────────────────────────────────────────── */
 
-        // AR assets — must live in repo root next to index.html
+        // AR assets - must live in repo root next to index.html
         const MIND_TARGET = 'targets.mind';
         const DRONE_GLB_AR = 'white_drone.glb';         // primary (~5 MB, no Draco)
         const DRONE_GLB_SRC = 'drone-ar.glb';            // fallback (~10 MB)
@@ -2650,7 +2605,7 @@
                 droneRig.addEventListener('model-error', (e) => {
                     console.error('Drone model-error:', e);
                     setDbg('dbg-drone', 'white_drone.glb: FAIL', 'bad');
-                    setArHint('Drone failed to load — restart serve & hard refresh');
+                    setArHint('Drone failed to load - restart serve & hard refresh');
                 });
             }
 
@@ -2658,11 +2613,11 @@
                 setDbg('dbg-track', 'Tracking: TARGET FOUND (idx 0)', 'ok');
                 const loaded = droneRig && droneRig.getObject3D('mesh');
                 document.getElementById('target-badge').textContent = loaded ? '✓ DRONE LIVE' : '✓ TARGET: LOCKED';
-                setArHint(loaded ? 'Tap or drag to control the drone · pinch to zoom' : 'Poster locked — loading drone…');
+                setArHint(loaded ? 'Tap or drag to control the drone · pinch to zoom' : 'Poster locked - loading drone…');
             });
 
             targetEl.addEventListener('targetLost', () => {
-                setDbg('dbg-track', 'Tracking: target lost — scanning', 'warn');
+                setDbg('dbg-track', 'Tracking: target lost - scanning', 'warn');
                 document.getElementById('target-badge').textContent = 'TARGET: SCANNING';
                 setArHint('Center the full poster in frame');
             });
@@ -3011,8 +2966,8 @@
         window.addEventListener('load', () => {
             preloadDroneModel();
             setTimeout(() => {
-                if (!window.AFRAME) console.error('A-Frame failed to load — check network / CDN access');
-                else if (!mindArAvailable()) console.error('MindAR failed to load — A-Frame is present but mindar-image component missing');
+                if (!window.AFRAME) console.error('A-Frame failed to load - check network / CDN access');
+                else if (!mindArAvailable()) console.error('MindAR failed to load - A-Frame is present but mindar-image component missing');
             }, 2000);
         });
 
@@ -3030,10 +2985,10 @@
             overlay.classList.remove('ar-live');
             resetArDebug();
 
-            setDbg('dbg-secure', `HTTPS: ${window.isSecureContext ? 'OK' : 'FAIL — need https://'}`, window.isSecureContext ? 'ok' : 'bad');
+            setDbg('dbg-secure', `HTTPS: ${window.isSecureContext ? 'OK' : 'FAIL - need https://'}`, window.isSecureContext ? 'ok' : 'bad');
 
             if (!window.isSecureContext) {
-                showArError('Camera needs HTTPS. Use the https:// localtunnel link or GitHub Pages — not http://10.x.x.x');
+                showArError('Camera needs HTTPS. Use the https:// localtunnel link or GitHub Pages - not http://10.x.x.x');
                 return;
             }
 
@@ -3055,7 +3010,7 @@
                 await waitForArLibs();
                 setDbg('dbg-mindar', 'MindAR: OK', 'ok');
             } catch (_) {
-                setDbg('dbg-mindar', 'MindAR: FAIL — reload page', 'bad');
+                setDbg('dbg-mindar', 'MindAR: FAIL - reload page', 'bad');
                 showArError('AR engine did not load. Reload the page with internet access so A-Frame and MindAR can download from the CDN.');
                 return;
             }
@@ -3114,9 +3069,9 @@
                 clearTimeout(failTimer);
                 relocateVideo(sceneWrap);
                 setDbg('dbg-camera', 'Camera: live', 'ok');
-                setScanStatus('CAMERA LIVE — POINT AT POSTER');
+                setScanStatus('CAMERA LIVE - POINT AT POSTER');
                 hideScanOverlay();
-                setArHint('Fill the frame with the full poster — badge must say TARGET LOCKED');
+                setArHint('Fill the frame with the full poster - badge must say TARGET LOCKED');
                 arLaunching = false;
             };
             const fail = (msg) => {
@@ -3129,7 +3084,7 @@
                 showArError(msg);
             };
 
-            // Relocate MindAR's <video> into our container as soon as it appears —
+            // Relocate MindAR's <video> into our container as soon as it appears -
             // otherwise it sits behind #ar-overlay (z-index 9999) and nothing renders.
             relocatePoll = setInterval(() => {
                 if (relocateVideo(sceneWrap)) clearInterval(relocatePoll);
@@ -3163,7 +3118,7 @@
             }, 15000);
         }
 
-        /* ── EXIT AR — tears down the scene completely so camera is released ── */
+        /* ── EXIT AR - tears down the scene completely so camera is released ── */
         document.getElementById('exit-ar').addEventListener('click', () => {
             const sceneWrap = document.getElementById('ar-scene-wrap');
             const scanAnim = document.getElementById('grid-scan-anim');
@@ -3191,7 +3146,7 @@
             pinchZoom.active = false;
             autoSpinEnabled = false;
             document.getElementById('target-badge').textContent = 'TARGET: SCANNING';
-            setArHint('Fill the frame with the full poster — hold steady');
+            setArHint('Fill the frame with the full poster - hold steady');
             arLaunching = false;
         });
 
