@@ -7,7 +7,7 @@
     <meta name="description"
         content="Autonomous Drone Navigation based on Deep Reinforcement Learning - Ruppin Academic Center, AI & Data Science. NVIDIA Isaac Sim, PPO, YOLO v11.">
     <meta name="theme-color" content="#EBF0F0">
-    <title>DRL Drone Navigation | Ruppin Academic Center</title>
+    <title>Drone RL | Autonomous Drone Navigation</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1314,26 +1314,6 @@
         }
 
         /* ═══════════════════════════════════════
-       VIDEO MODAL
-    ═══════════════════════════════════════ */
-        #vid-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 9000;
-            background: rgba(13, 23, 38, 0.88);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        #vid-modal.open {
-            display: flex;
-        }
-
-        /* ═══════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════ */
         @media (max-width: 640px) {
@@ -1533,7 +1513,7 @@
         <div id="ar-error">
             <p class="font-orbitron text-[0.65rem] tracking-[0.25em] neon-glow-sm mb-4">AR UNAVAILABLE</p>
             <p id="ar-error-msg" class="text-sm" style="color: rgba(13, 23, 38, 0.9);"></p>
-            <button class="btn-neon btn-ghost mt-6" style="padding:10px 22px;font-size:0.68rem;"
+            <button type="button" class="btn-neon btn-ghost mt-6" style="padding:10px 22px;font-size:0.68rem;"
                 onclick="closeArError()">Back to site</button>
         </div>
 
@@ -1554,7 +1534,7 @@
             </div>
             <!-- Exit button (pointer-events re-enabled) -->
             <div style="position:absolute;top:50px;right:18px;pointer-events:auto;">
-                <button id="exit-ar" class="hud-badge">✕ EXIT AR</button>
+                <button type="button" id="exit-ar" class="hud-badge">✕ EXIT AR</button>
             </div>
             <!-- Bottom instruction -->
             <div
@@ -1607,7 +1587,8 @@
             style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;">
 
             <!-- Logo -->
-            <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+            <a href="#" aria-label="Drone RL home"
+                style="display:flex;align-items:center;gap:10px;text-decoration:none;">
                 <img src="Assets/drone-logo.svg" alt="Drone logo" width="40" height="40"
                     style="width:40px;height:40px;object-fit:contain;flex-shrink:0;">
                 <span class="font-orbitron font-bold"
@@ -1633,7 +1614,8 @@
             </div>
 
             <!-- Mobile hamburger -->
-            <button id="ham-btn" class="lg:hidden"
+            <button type="button" id="ham-btn" class="lg:hidden" aria-label="Toggle navigation"
+                aria-controls="mob-nav" aria-expanded="false"
                 style="color:#218676;background:none;border:none;cursor:pointer;padding:4px;" onclick="toggleNav()">
                 <svg id="ham-icon" viewBox="0 0 22 16" width="22" height="16" fill="none" stroke="#218676"
                     stroke-width="2" stroke-linecap="round">
@@ -1662,7 +1644,7 @@
                     onclick="toggleNav()">SLAM</a>
                 <a href="#dashboard" class="font-orbitron text-[0.68rem] tracking-widest text-gray-800 uppercase"
                     onclick="toggleNav()">Dashboard</a>
-                <button class="btn-neon self-start" style="padding:9px 22px;font-size:0.72rem;"
+                <button type="button" class="btn-neon self-start" style="padding:9px 22px;font-size:0.72rem;"
                     onclick="launchAR()">Launch AR</button>
             </div>
         </div>
@@ -1689,6 +1671,7 @@
                 <div class="hero-copy">
 
                     <h1 class="font-orbitron font-black leading-[1.12] mb-4 fade-in" data-d="2"
+                        aria-label="Autonomous Drone Navigation — Deep Reinforcement Learning for Search and Rescue"
                         style="font-size:clamp(1.5rem,4vw,2.72rem);">
                         <span class="glitch neon-glow" data-text="Autonomous Drone Navigation">Autonomous Drone
                         </span>Navigation<br>
@@ -1715,7 +1698,7 @@
                     </p>
 
                     <div class="hero-ar-mobile-only flex flex-col sm:flex-row gap-4 fade-in" data-d="5">
-                        <button class="btn-neon btn-pulse" onclick="launchAR()">
+                        <button type="button" class="btn-neon btn-pulse" onclick="launchAR()">
                             <!-- AR icon -->
                             <svg viewBox="0 0 22 22" width="15" height="15" fill="none" stroke="currentColor"
                                 stroke-width="1.8">
@@ -1955,6 +1938,7 @@
                 <div class="vid-card glass fade-in" data-d="2">
                     <div class="vid-thumb" style="background:#0D1726;">
                         <video src="Assets/3d_env/room1.web.mp4" autoplay loop muted playsinline preload="metadata"
+                            aria-label="Curriculum training stage 1 simulation"
                             style="width: 100%; height: 100%; object-fit: cover;"></video>
                     </div>
                     <div class="p-4">
@@ -1970,6 +1954,7 @@
                 <div class="vid-card glass fade-in" data-d="3">
                     <div class="vid-thumb" style="background:#0D1726;">
                         <video src="Assets/3d_env/room2.web.mp4" autoplay loop muted playsinline preload="metadata"
+                            aria-label="Curriculum training stage 2 simulation"
                             style="width: 100%; height: 100%; object-fit: cover;"></video>
                     </div>
                     <div class="p-4">
@@ -1985,6 +1970,7 @@
                 <div class="vid-card glass fade-in" data-d="4">
                     <div class="vid-thumb" style="background:#0D1726;">
                         <video src="Assets/3d_env/room3.web.mp4" autoplay loop muted playsinline preload="metadata"
+                            aria-label="Curriculum training stage 3 simulation"
                             style="width: 100%; height: 100%; object-fit: cover;"></video>
                     </div>
                     <div class="p-4">
@@ -2000,6 +1986,7 @@
                 <div class="vid-card glass fade-in" data-d="5">
                     <div class="vid-thumb" style="background:#0D1726;">
                         <video src="Assets/3d_env/room4.web.mp4" autoplay loop muted playsinline preload="metadata"
+                            aria-label="Curriculum training stage 4 simulation"
                             style="width: 100%; height: 100%; object-fit: cover;"></video>
                     </div>
                     <div class="p-4">
@@ -2375,31 +2362,6 @@
         </div>
     </footer>
 
-
-    <!-- ╔══════════════════════════════════════════╗
-     ║             VIDEO MODAL                 ║
-     ╚══════════════════════════════════════════╝ -->
-    <div id="vid-modal">
-        <div class="glass-strong" style="width:100%;max-width:820px;padding:22px;position:relative;">
-            <button onclick="closeVideo()"
-                style="position:absolute;top:12px;right:12px;background:rgba(255,40,40,.1);border:1px solid rgba(255,68,68,.4);color:#ff6666;border-radius:5px;padding:5px 12px;font-family:'Orbitron',monospace;font-size:0.6rem;cursor:pointer;z-index:1;">
-                ✕ CLOSE
-            </button>
-            <h3 id="vid-title" class="font-orbitron text-[0.78rem] neon mb-4">VIDEO PLAYER</h3>
-            <div
-                style="aspect-ratio:16/9;background:#000;border-radius:8px;overflow:hidden;border:1px solid rgba(33, 134, 118, 0.6);">
-                <iframe id="vid-frame" width="100%" height="100%" src="" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen style="border:none;display:block;"></iframe>
-            </div>
-            <p
-                style="margin-top:12px;text-align:center;font-size:0.68rem;color: rgba(13, 23, 38, 0.5);font-family:'Orbitron',monospace;letter-spacing:.15em;">
-                REPLACE <span class="neon">YOUR_YOUTUBE_ID_*</span> IN THE JS WITH YOUR ACTUAL VIDEO IDs
-            </p>
-        </div>
-    </div>
-
-
     <!-- ╔══════════════════════════════════════════╗
      ║              JAVASCRIPT                 ║
      ╚══════════════════════════════════════════╝ -->
@@ -2531,24 +2493,11 @@
 
         /* ── MOBILE NAV ── */
         function toggleNav() {
-            document.getElementById('mob-nav').classList.toggle('hidden');
+            const menu = document.getElementById('mob-nav');
+            const button = document.getElementById('ham-btn');
+            const isOpen = menu.classList.toggle('hidden') === false;
+            button.setAttribute('aria-expanded', String(isOpen));
         }
-
-        /* ── VIDEO MODAL ── */
-        function openVideo(id, title) {
-            document.getElementById('vid-title').textContent = title.toUpperCase();
-            document.getElementById('vid-frame').src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-            document.getElementById('vid-modal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeVideo() {
-            document.getElementById('vid-modal').classList.remove('open');
-            document.getElementById('vid-frame').src = '';
-            document.body.style.overflow = '';
-        }
-        document.getElementById('vid-modal').addEventListener('click', e => {
-            if (e.target === document.getElementById('vid-modal')) closeVideo();
-        });
 
         /* ── AR LAUNCH LOGIC ──────────────────────────────────────────────────
            The <a-scene> is injected dynamically so A-Frame + MindAR initialise
@@ -2558,8 +2507,7 @@
 
         // AR assets - must live in repo root next to index.html
         const MIND_TARGET = 'targets.mind';
-        const DRONE_GLB_AR = 'white_drone.glb';         // primary (~5 MB, no Draco)
-        const DRONE_GLB_SRC = 'drone-ar.glb';            // fallback (~10 MB)
+        const DRONE_GLB_AR = 'white_drone.glb';
         const AFRAME_CDN = 'https://aframe.io/releases/1.4.0/aframe.min.js';
         const MINDAR_CDN = 'https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js';
 
@@ -2670,15 +2618,12 @@
             setDbg('dbg-targets', `targets.mind: ${mindOk ? 'OK' : 'FAIL'}`, mindOk ? 'ok' : 'bad');
 
             const droneArOk = await assetExists(DRONE_GLB_AR);
-            const droneSrcOk = !droneArOk && await assetExists(DRONE_GLB_SRC);
-            const droneOk = droneArOk || droneSrcOk;
-            setDbg('dbg-drone',
-                droneArOk ? 'white_drone.glb: OK' : droneSrcOk ? 'drone-ar.glb: OK (fallback)' : 'drone: FAIL',
-                droneOk ? 'ok' : 'bad');
+            setDbg('dbg-drone', droneArOk ? 'white_drone.glb: OK' : 'white_drone.glb: FAIL',
+                droneArOk ? 'ok' : 'bad');
 
             if (!mindOk) throw new Error('targets.mind not found on server');
-            if (!droneOk) throw new Error('white_drone.glb / drone-ar.glb not found on server');
-            return { mindOk, droneOk, droneArOk };
+            if (!droneArOk) throw new Error('white_drone.glb not found on server');
+            return { mindOk, droneArOk };
         }
 
         function buildArSceneHtml(modelUrl) {
