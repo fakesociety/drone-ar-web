@@ -8,8 +8,6 @@
         content="Autonomous Drone Navigation based on Deep Reinforcement Learning - Ruppin Academic Center, AI & Data Science. NVIDIA Isaac Sim, PPO, YOLO v11.">
     <meta name="theme-color" content="#EBF0F0">
     <title>DRL Drone Navigation | Ruppin Academic Center</title>
-    <link rel="preload" href="white_drone.glb" as="fetch" crossorigin="anonymous">
-
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,10 +29,6 @@
             }
         }
     </script>
-
-    <!-- A-Frame MUST load before MindAR (MindAR extends A-Frame; it does not bundle it) -->
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
     <link rel="icon" type="image/svg+xml" href="Assets/drone-logo.svg">
 
@@ -1345,12 +1339,12 @@
         @media (max-width: 640px) {
             .hero-copy h1 {
                 margin-bottom: 1.5rem;
-                font-size: 1.95rem !important;
+                font-size: 1.76rem !important;
                 line-height: 1.16;
             }
 
             .hero-copy h1>span:last-child {
-                font-size: 0.64em !important;
+                font-size: 0.58em !important;
                 line-height: 1.4 !important;
             }
 
@@ -1694,11 +1688,11 @@
                 <div class="hero-copy">
 
                     <h1 class="font-orbitron font-black leading-[1.12] mb-4 fade-in" data-d="2"
-                        style="font-size:clamp(1.55rem,4.2vw,2.85rem);">
+                        style="font-size:clamp(1.5rem,4vw,2.72rem);">
                         <span class="glitch neon-glow" data-text="Autonomous Drone Navigation">Autonomous Drone
                         </span>Navigation<br>
                         <span
-                            style="color: rgba(13, 23, 38, 0.7);font-size:0.58em;font-weight:600;letter-spacing:0.06em;line-height:1.35;display:inline-block;margin-top:0.15em;">Deep
+                            style="color: rgba(13, 23, 38, 0.7);font-size:0.56em;font-weight:600;letter-spacing:0.06em;line-height:1.35;display:inline-block;margin-top:0.15em;">Deep
                             Reinforcement Learning for Search &amp; Rescue</span>
                     </h1>
 
@@ -1711,7 +1705,7 @@
                         Advisor: Dr. Benny Bornfeld
                     </p>
 
-                    <p class="hero-summary text-sm leading-relaxed mb-8 fade-in" data-d="3"
+                    <p class="hero-summary hidden md:block text-sm leading-relaxed mb-8 fade-in" data-d="3"
                         style="color: rgba(13, 23, 38, 0.9);max-width:460px;">
                         An autonomous drone capable of navigating complex GPS-denied environments, avoiding obstacles,
                         detecting people in real time, and building spatial maps for search and rescue
@@ -1780,6 +1774,23 @@
                     <path d="M1 1l5 5 5-5" />
                 </svg>
             </div>
+        </div>
+    </section>
+
+
+    <!-- Mobile-only summary keeps the first screen focused and uncluttered. -->
+    <section class="md:hidden project-summary-mobile py-16 px-5"
+        style="background:rgba(255,255,255,0.42);border-top:1px solid rgba(33,134,118,0.08);border-bottom:1px solid rgba(33,134,118,0.08);">
+        <div class="fade-in" style="max-width:540px;margin:0 auto;">
+            <h2 class="font-orbitron font-bold" style="font-size:1.35rem;color:#0D1726;">
+                PROJECT <span class="neon-glow">SUMMARY</span>
+            </h2>
+            <p style="font-size:0.86rem;color:rgba(13,23,38,0.82);line-height:1.8;margin-top:18px;">
+                An autonomous drone capable of navigating complex GPS-denied environments, avoiding obstacles,
+                detecting people in real time, and building spatial maps for search and rescue missions. The system
+                integrates Deep Reinforcement Learning, YOLOv11, and Visual SLAM into a complete perception and
+                navigation pipeline developed in NVIDIA Isaac Sim and Isaac Lab.
+            </p>
         </div>
     </section>
 
@@ -2300,22 +2311,27 @@
                     <div class="dashboard-slider-window">
                         <img class="dashboard-slide is-active" src="Assets/dashboard/slam-map.png"
                             alt="Live 3D SLAM dashboard with drone position, obstacles, goal, and radar telemetry"
+                            loading="lazy" decoding="async"
                             data-title="3D SLAM Map"
                             data-description="Live spatial awareness layer showing explored walls, obstacles, drone pose, detected person, goal marker, and a compact 2D radar view.">
                         <img class="dashboard-slide" src="Assets/dashboard/camera-feeds.png"
                             alt="Multi-camera dashboard with front, rear, left, right, depth, saliency, and autoencoder reconstruction feeds"
+                            loading="lazy" decoding="async"
                             data-title="Camera Feeds"
                             data-description="Front, right, left, and third person views paired with depth input, saliency heatmap, and AE reconstruction for model explainability.">
                         <img class="dashboard-slide" src="Assets/dashboard/navigation-control.png"
                             alt="PPO navigation dashboard with motor command charts and 3D navigation map"
+                            loading="lazy" decoding="async"
                             data-title="PPO Navigation"
                             data-description="Control telemetry for body velocity, desired motion, yaw, altitude, motor commands, and corridor-level route planning.">
                         <img class="dashboard-slide" src="Assets/dashboard/yolo-detection.png"
                             alt="YOLO detection dashboard showing human detection confidence and rescue log"
+                            loading="lazy" decoding="async"
                             data-title="YOLO Detection"
                             data-description="Rescue pipeline view that tracks human detections, confidence threshold, captured frames, and room-level rescue log entries.">
                         <img class="dashboard-slide" src="Assets/dashboard/recordings-review.png"
                             alt="Flight data review dashboard with replay timeline and telemetry graph"
+                            loading="lazy" decoding="async"
                             data-title="Recordings Review"
                             data-description="Replay interface for JSONL flight logs, telemetry timelines, mission elapsed time, frames, map coverage, and crash status.">
                         <div class="dashboard-slider-controls" aria-label="Dashboard screenshot navigation">
@@ -2359,9 +2375,6 @@
                     style="font-size:0.68rem;color: rgba(13, 23, 38, 0.5);font-family:'Orbitron',monospace;letter-spacing:.18em;">
                     RUPPIN ACADEMIC CENTER © 2026
                 </p>
-                <p style="font-size:0.68rem;color: rgba(13, 23, 38, 0.5);">Moty Sakhartov, Niv Bitton, Eyal
-                    Davidov
-                    · Advisor: Dr. Benny Bornfeld</p>
             </div>
         </div>
     </footer>
@@ -2551,6 +2564,8 @@
         const MIND_TARGET = 'targets.mind';
         const DRONE_GLB_AR = 'white_drone.glb';         // primary (~5 MB, no Draco)
         const DRONE_GLB_SRC = 'drone-ar.glb';            // fallback (~10 MB)
+        const AFRAME_CDN = 'https://aframe.io/releases/1.4.0/aframe.min.js';
+        const MINDAR_CDN = 'https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js';
 
         const AR_DRONE_DEFAULTS = {
             scale: 0.2,
@@ -2568,6 +2583,7 @@
         let droneBlobUrl = null;
         let dronePreloadPromise = null;
         let dronePreloadPct = 0;
+        let arLibrariesPromise = null;
         let autoSpinEnabled = false;
         let droneModelReady = false;
         let droneYaw = 0;
@@ -3088,14 +3104,45 @@
             });
         }
 
-        // Warn in console early if scripts did not load (helps debugging on phone)
-        window.addEventListener('load', () => {
-            preloadDroneModel();
-            setTimeout(() => {
-                if (!window.AFRAME) console.error('A-Frame failed to load - check network / CDN access');
-                else if (!mindArAvailable()) console.error('MindAR failed to load - A-Frame is present but mindar-image component missing');
-            }, 2000);
-        });
+        function loadExternalScript(src, id) {
+            const existing = document.getElementById(id);
+            if (existing) {
+                if (existing.dataset.loaded === 'true') return Promise.resolve();
+                return new Promise((resolve, reject) => {
+                    existing.addEventListener('load', resolve, { once: true });
+                    existing.addEventListener('error', reject, { once: true });
+                });
+            }
+
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.id = id;
+                script.src = src;
+                script.async = true;
+                script.addEventListener('load', () => {
+                    script.dataset.loaded = 'true';
+                    resolve();
+                }, { once: true });
+                script.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true });
+                document.head.appendChild(script);
+            });
+        }
+
+        function loadArLibraries() {
+            if (mindArAvailable()) return Promise.resolve();
+            if (arLibrariesPromise) return arLibrariesPromise;
+
+            arLibrariesPromise = (async () => {
+                if (!window.AFRAME) await loadExternalScript(AFRAME_CDN, 'aframe-runtime');
+                if (!mindArAvailable()) await loadExternalScript(MINDAR_CDN, 'mindar-runtime');
+                await waitForArLibs();
+            })().catch(error => {
+                arLibrariesPromise = null;
+                throw error;
+            });
+
+            return arLibrariesPromise;
+        }
 
         async function launchAR() {
             if (arLaunching) return;
@@ -3133,7 +3180,7 @@
             setScanStatus('LOADING AR ENGINE...');
 
             try {
-                await waitForArLibs();
+                await loadArLibraries();
                 setDbg('dbg-mindar', 'MindAR: OK', 'ok');
             } catch (_) {
                 setDbg('dbg-mindar', 'MindAR: FAIL - reload page', 'bad');
