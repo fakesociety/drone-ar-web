@@ -153,7 +153,7 @@
         .dashboard-layout {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 24px;
+            gap: 56px;
             align-items: start;
         }
 
@@ -277,7 +277,7 @@
         }
 
         .dashboard-copy {
-            padding: 28px;
+            padding: 0;
             width: 100%;
         }
 
@@ -285,6 +285,7 @@
             font-size: 0.82rem;
             color: rgba(13, 23, 38, 0.7);
             line-height: 1.75;
+            max-width: 760px;
         }
 
         .dashboard-stat-grid {
@@ -1237,20 +1238,14 @@
     ═══════════════════════════════════════ */
         .team-photo-wrap {
             position: relative;
-            width: 92px;
-            height: 92px;
+            width: 108px;
+            height: 108px;
             margin: 0 auto 16px;
             border-radius: 50%;
-            padding: 2px;
-            background: linear-gradient(145deg, #218676 0%, rgba(99, 149, 142, 0.55) 100%);
-            box-shadow: 0 0 22px rgba(33, 134, 118, 0.6), inset 0 0 12px rgba(33, 134, 118, 0.08);
-            transition: box-shadow 0.35s ease, transform 0.35s ease;
+            padding: 1px;
+            background: rgba(33, 134, 118, 0.72);
+            box-shadow: 0 8px 20px rgba(13, 23, 38, 0.14), 0 0 12px rgba(33, 134, 118, 0.16);
             overflow: hidden;
-        }
-
-        .team-card:hover .team-photo-wrap {
-            box-shadow: 0 0 32px rgba(33, 134, 118, 0.85), 0 0 12px rgba(99, 149, 142, 0.2);
-            transform: scale(1.04);
         }
 
         .team-photo {
@@ -1261,15 +1256,50 @@
             object-position: center 18%;
             display: block;
             filter: none;
-            transition: filter 0.35s ease;
+            image-rendering: auto;
+            backface-visibility: hidden;
         }
 
-        .team-card:hover .team-photo {
-            filter: brightness(1.05);
+        .advisor-photo-wrap {
+            margin-bottom: 12px;
         }
 
         .team-photo--niv {
             object-position: center 12%;
+        }
+
+        .team-socials {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .team-social-link {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 0;
+            color: #0D1726;
+            background: transparent;
+            transition: color 0.2s ease;
+        }
+
+        .team-social-link:hover,
+        .team-social-link:focus-visible {
+            color: #218676;
+            background: transparent;
+            outline: none;
+        }
+
+        @media (min-width: 1200px) {
+            .hero-ar-mobile-only {
+                display: none !important;
+            }
         }
 
         /* legacy fallback initials */
@@ -1348,7 +1378,7 @@
             }
 
             .dashboard-copy {
-                padding: 22px;
+                padding: 0;
             }
 
             .dashboard-stat-grid {
@@ -1377,10 +1407,43 @@
         }
 
         @media (min-width: 1024px) {
+            .controller-grid {
+                grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+                align-items: stretch;
+            }
+
+            .controller-card {
+                height: 100%;
+                min-height: 200px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .controller-card .controller-output {
+                margin-top: auto !important;
+            }
+
             .stable-flight-media {
                 width: 100%;
-                max-width: 300px;
-                justify-self: end;
+                max-width: none;
+                height: 100%;
+                min-height: 200px;
+                justify-self: stretch;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .stable-flight-media .vid-thumb {
+                position: relative;
+                flex: 1 1 0;
+                height: 0;
+                min-height: 0;
+                aspect-ratio: auto;
+            }
+
+            .stable-flight-media .vid-thumb video {
+                position: absolute;
+                inset: 0;
             }
 
             .human-detection-media {
@@ -1557,21 +1620,25 @@
             </a>
 
             <!-- Desktop links -->
-            <div class="hidden md:flex items-center gap-8">
+            <div class="hidden lg:flex items-center gap-4">
+                <a href="#team"
+                    class="nav-link font-orbitron text-[0.62rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">Team</a>
+                <a href="#showcase"
+                    class="nav-link font-orbitron text-[0.62rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">Training</a>
                 <a href="#perception"
-                    class="nav-link font-orbitron text-[0.68rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">Perception</a>
+                    class="nav-link font-orbitron text-[0.62rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">Perception</a>
                 <a href="#control"
-                    class="nav-link font-orbitron text-[0.68rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">Control</a>
+                    class="nav-link font-orbitron text-[0.62rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">Control</a>
+                <a href="#detection"
+                    class="nav-link font-orbitron text-[0.62rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">Detection</a>
                 <a href="#slam"
-                    class="nav-link font-orbitron text-[0.68rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">SLAM</a>
+                    class="nav-link font-orbitron text-[0.62rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">SLAM</a>
                 <a href="#dashboard"
-                    class="nav-link font-orbitron text-[0.68rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">Dashboard</a>
-                <button class="btn-neon" style="padding:8px 20px;font-size:0.68rem;" onclick="launchAR()">Launch
-                    AR</button>
+                    class="nav-link font-orbitron text-[0.62rem] tracking-widest text-gray-800 hover:text-[#218676] transition-colors uppercase">Dashboard</a>
             </div>
 
             <!-- Mobile hamburger -->
-            <button id="ham-btn" class="md:hidden"
+            <button id="ham-btn" class="lg:hidden"
                 style="color:#218676;background:none;border:none;cursor:pointer;padding:4px;" onclick="toggleNav()">
                 <svg id="ham-icon" viewBox="0 0 22 16" width="22" height="16" fill="none" stroke="#218676"
                     stroke-width="2" stroke-linecap="round">
@@ -1583,13 +1650,19 @@
         </div>
 
         <!-- Mobile dropdown -->
-        <div id="mob-nav" class="hidden md:hidden"
+        <div id="mob-nav" class="hidden lg:hidden"
             style="padding:16px 0 8px;border-top:1px solid rgba(33, 134, 118, 0.08);margin-top:14px;">
             <div style="display:flex;flex-direction:column;gap:16px;">
+                <a href="#team" class="font-orbitron text-[0.68rem] tracking-widest text-gray-800 uppercase"
+                    onclick="toggleNav()">Team</a>
+                <a href="#showcase" class="font-orbitron text-[0.68rem] tracking-widest text-gray-800 uppercase"
+                    onclick="toggleNav()">Training</a>
                 <a href="#perception" class="font-orbitron text-[0.68rem] tracking-widest text-gray-800 uppercase"
                     onclick="toggleNav()">Perception</a>
                 <a href="#control" class="font-orbitron text-[0.68rem] tracking-widest text-gray-800 uppercase"
                     onclick="toggleNav()">Control</a>
+                <a href="#detection" class="font-orbitron text-[0.68rem] tracking-widest text-gray-800 uppercase"
+                    onclick="toggleNav()">Detection</a>
                 <a href="#slam" class="font-orbitron text-[0.68rem] tracking-widest text-gray-800 uppercase"
                     onclick="toggleNav()">SLAM</a>
                 <a href="#dashboard" class="font-orbitron text-[0.68rem] tracking-widest text-gray-800 uppercase"
@@ -1646,7 +1719,7 @@
                         complete perception and navigation pipeline developed in NVIDIA Isaac Sim and Isaac Lab.
                     </p>
 
-                    <div class="flex flex-col sm:flex-row gap-4 fade-in" data-d="5">
+                    <div class="hero-ar-mobile-only flex flex-col sm:flex-row gap-4 fade-in" data-d="5">
                         <button class="btn-neon btn-pulse" onclick="launchAR()">
                             <!-- AR icon -->
                             <svg viewBox="0 0 22 22" width="15" height="15" fill="none" stroke="currentColor"
@@ -1732,11 +1805,9 @@
                     style="position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(33,134,118,0.12),transparent 60%);pointer-events:none;">
                 </div>
                 <div style="position:relative;">
-                    <div
-                        style="width:72px;height:72px;margin:0 auto 12px;border-radius:50%;padding:2px;background:linear-gradient(145deg,#218676,rgba(99,149,142,0.55));box-shadow:0 0 18px rgba(33,134,118,0.24);overflow:hidden;">
-                        <img src="Assets/profile_pics/benny.jpeg" alt="Dr. Benny Bornfeld" width="72" height="72"
-                            loading="lazy"
-                            style="width:100%;height:100%;display:block;border-radius:50%;object-fit:cover;object-position:center;">
+                    <div class="team-photo-wrap advisor-photo-wrap">
+                        <img class="team-photo" src="Assets/profile_pics/gen/benny.png" alt="Dr. Benny Bornfeld"
+                            width="108" height="108" loading="lazy">
                     </div>
                     <p class="font-orbitron"
                         style="font-size:0.58rem;letter-spacing:0.2em;color:#218676;font-weight:700;margin-bottom:7px;">
@@ -1752,30 +1823,84 @@
 
                 <div class="glass p-6 text-center fade-in team-card" data-d="1">
                     <div class="team-photo-wrap">
-                        <img class="team-photo" src="Assets/profile_pics/motylinked.jpg" alt="Moty Sakhartov" width="92"
-                            height="92" loading="lazy">
+                        <img class="team-photo" src="Assets/profile_pics/gen/moty.png" alt="Moty Sakhartov" width="108"
+                            height="108" loading="lazy">
                     </div>
                     <h4 class="font-orbitron text-[0.8rem] font-bold mb-1" style="color: rgba(13, 23, 38, 1);">Moty
                         Sakhartov</h4>
+                    <p style="font-size:0.72rem;color:rgba(13,23,38,0.62);margin-top:6px;">Student at Ruppin Academic
+                        Center</p>
+                    <div class="team-socials">
+                        <a class="team-social-link" href="https://www.linkedin.com/in/moty-sakhartov/" target="_blank"
+                            rel="noopener noreferrer" aria-label="Moty Sakhartov on LinkedIn">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M5.34 3.5A2.34 2.34 0 113 5.84 2.34 2.34 0 015.34 3.5zM3.32 8.1h4.04V21H3.32V8.1zm6.55 0h3.87v1.76h.05c.54-1.02 1.86-2.1 3.83-2.1 4.1 0 4.86 2.7 4.86 6.2V21h-4.03v-6.24c0-1.49-.03-3.4-2.07-3.4-2.08 0-2.4 1.62-2.4 3.29V21H9.87V8.1z" />
+                            </svg>
+                        </a>
+                        <a class="team-social-link" href="https://github.com/fakesociety" target="_blank"
+                            rel="noopener noreferrer" aria-label="Moty Sakhartov on GitHub">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M12 .7a11.3 11.3 0 00-3.57 22.02c.57.1.77-.25.77-.55v-2.16c-3.15.68-3.82-1.34-3.82-1.34-.51-1.31-1.26-1.66-1.26-1.66-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.74 2.66 1.24 3.31.95.1-.74.4-1.24.72-1.53-2.52-.29-5.17-1.26-5.17-5.59 0-1.24.44-2.25 1.17-3.04-.12-.29-.51-1.44.11-3 0 0 .95-.31 3.11 1.16a10.8 10.8 0 015.66 0c2.16-1.47 3.11-1.16 3.11-1.16.62 1.56.23 2.71.11 3 .73.79 1.17 1.8 1.17 3.04 0 4.34-2.66 5.3-5.18 5.58.41.35.77 1.04.77 2.1v3.16c0 .3.2.66.78.55A11.3 11.3 0 0012 .7z" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="glass p-6 text-center fade-in team-card" data-d="2">
                     <div class="team-photo-wrap">
-                        <img class="team-photo team-photo--niv" src="Assets/profile_pics/niv.jpg" alt="Niv Bitton"
-                            width="92" height="92" loading="lazy">
+                        <img class="team-photo team-photo--niv" src="Assets/profile_pics/gen/niv.png" alt="Niv Bitton"
+                            width="108" height="108" loading="lazy">
                     </div>
                     <h4 class="font-orbitron text-[0.8rem] font-bold mb-1" style="color: rgba(13, 23, 38, 1);">Niv
                         Bitton
                     </h4>
+                    <p style="font-size:0.72rem;color:rgba(13,23,38,0.62);margin-top:6px;">Student at Ruppin Academic
+                        Center</p>
+                    <div class="team-socials">
+                        <a class="team-social-link" href="https://www.linkedin.com/in/nivbitton/" target="_blank"
+                            rel="noopener noreferrer" aria-label="Niv Bitton on LinkedIn">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M5.34 3.5A2.34 2.34 0 113 5.84 2.34 2.34 0 015.34 3.5zM3.32 8.1h4.04V21H3.32V8.1zm6.55 0h3.87v1.76h.05c.54-1.02 1.86-2.1 3.83-2.1 4.1 0 4.86 2.7 4.86 6.2V21h-4.03v-6.24c0-1.49-.03-3.4-2.07-3.4-2.08 0-2.4 1.62-2.4 3.29V21H9.87V8.1z" />
+                            </svg>
+                        </a>
+                        <a class="team-social-link" href="https://github.com/nivb852" target="_blank"
+                            rel="noopener noreferrer" aria-label="Niv Bitton on GitHub">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M12 .7a11.3 11.3 0 00-3.57 22.02c.57.1.77-.25.77-.55v-2.16c-3.15.68-3.82-1.34-3.82-1.34-.51-1.31-1.26-1.66-1.26-1.66-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.74 2.66 1.24 3.31.95.1-.74.4-1.24.72-1.53-2.52-.29-5.17-1.26-5.17-5.59 0-1.24.44-2.25 1.17-3.04-.12-.29-.51-1.44.11-3 0 0 .95-.31 3.11 1.16a10.8 10.8 0 015.66 0c2.16-1.47 3.11-1.16 3.11-1.16.62 1.56.23 2.71.11 3 .73.79 1.17 1.8 1.17 3.04 0 4.34-2.66 5.3-5.18 5.58.41.35.77 1.04.77 2.1v3.16c0 .3.2.66.78.55A11.3 11.3 0 0012 .7z" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="glass p-6 text-center fade-in team-card" data-d="3">
                     <div class="team-photo-wrap">
-                        <img class="team-photo" src="Assets/profile_pics/eyal.jpg" alt="Eyal Davidov" width="92"
-                            height="92" loading="lazy">
+                        <img class="team-photo" src="Assets/profile_pics/gen/eyal.png" alt="Eyal Davidov" width="108"
+                            height="108" loading="lazy">
                     </div>
                     <h4 class="font-orbitron text-[0.8rem] font-bold mb-1" style="color: rgba(13, 23, 38, 1);">Eyal
                         Davidov</h4>
+                    <p style="font-size:0.72rem;color:rgba(13,23,38,0.62);margin-top:6px;">Student at Ruppin Academic
+                        Center</p>
+                    <div class="team-socials">
+                        <a class="team-social-link" href="https://www.linkedin.com/in/eyal-davidov/" target="_blank"
+                            rel="noopener noreferrer" aria-label="Eyal Davidov on LinkedIn">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M5.34 3.5A2.34 2.34 0 113 5.84 2.34 2.34 0 015.34 3.5zM3.32 8.1h4.04V21H3.32V8.1zm6.55 0h3.87v1.76h.05c.54-1.02 1.86-2.1 3.83-2.1 4.1 0 4.86 2.7 4.86 6.2V21h-4.03v-6.24c0-1.49-.03-3.4-2.07-3.4-2.08 0-2.4 1.62-2.4 3.29V21H9.87V8.1z" />
+                            </svg>
+                        </a>
+                        <a class="team-social-link" href="https://github.com/EyalDavidov" target="_blank"
+                            rel="noopener noreferrer" aria-label="Eyal Davidov on GitHub">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M12 .7a11.3 11.3 0 00-3.57 22.02c.57.1.77-.25.77-.55v-2.16c-3.15.68-3.82-1.34-3.82-1.34-.51-1.31-1.26-1.66-1.26-1.66-1.03-.7.08-.69.08-.69 1.14.08 1.74 1.17 1.74 1.17 1.01 1.74 2.66 1.24 3.31.95.1-.74.4-1.24.72-1.53-2.52-.29-5.17-1.26-5.17-5.59 0-1.24.44-2.25 1.17-3.04-.12-.29-.51-1.44.11-3 0 0 .95-.31 3.11 1.16a10.8 10.8 0 015.66 0c2.16-1.47 3.11-1.16 3.11-1.16.62 1.56.23 2.71.11 3 .73.79 1.17 1.8 1.17 3.04 0 4.34-2.66 5.3-5.18 5.58.41.35.77 1.04.77 2.1v3.16c0 .3.2.66.78.55A11.3 11.3 0 0012 .7z" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
             </div>
@@ -1817,7 +1942,7 @@
                 <!-- Room 1 -->
                 <div class="vid-card glass fade-in" data-d="2">
                     <div class="vid-thumb" style="background:#0D1726;">
-                        <video src="Assets/3d_env/room1.mp4" autoplay loop muted playsinline
+                        <video src="Assets/3d_env/room1.web.mp4" autoplay loop muted playsinline preload="metadata"
                             style="width: 100%; height: 100%; object-fit: cover;"></video>
                     </div>
                     <div class="p-4">
@@ -1832,7 +1957,7 @@
                 <!-- Room 2 -->
                 <div class="vid-card glass fade-in" data-d="3">
                     <div class="vid-thumb" style="background:#0D1726;">
-                        <video src="Assets/3d_env/room2.mp4" autoplay loop muted playsinline
+                        <video src="Assets/3d_env/room2.web.mp4" autoplay loop muted playsinline preload="metadata"
                             style="width: 100%; height: 100%; object-fit: cover;"></video>
                     </div>
                     <div class="p-4">
@@ -1847,7 +1972,7 @@
                 <!-- Room 3 -->
                 <div class="vid-card glass fade-in" data-d="4">
                     <div class="vid-thumb" style="background:#0D1726;">
-                        <video src="Assets/3d_env/room3.mp4" autoplay loop muted playsinline
+                        <video src="Assets/3d_env/room3.web.mp4" autoplay loop muted playsinline preload="metadata"
                             style="width: 100%; height: 100%; object-fit: cover;"></video>
                     </div>
                     <div class="p-4">
@@ -1862,7 +1987,7 @@
                 <!-- Room 4 -->
                 <div class="vid-card glass fade-in" data-d="5">
                     <div class="vid-thumb" style="background:#0D1726;">
-                        <video src="Assets/3d_env/room4.mp4" autoplay loop muted playsinline
+                        <video src="Assets/3d_env/room4.web.mp4" autoplay loop muted playsinline preload="metadata"
                             style="width: 100%; height: 100%; object-fit: cover;"></video>
                     </div>
                     <div class="p-4">
@@ -1889,8 +2014,8 @@
                 </h2>
             </div>
 
-            <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-6 items-stretch">
-                <div class="vid-card glass fade-in" data-d="1">
+            <div class="grid lg:grid-cols-[0.82fr_1.18fr] gap-8 items-center">
+                <div class="vid-card glass fade-in" data-d="1" style="width:100%;max-width:500px;">
                     <div class="vid-thumb" style="background:#0D1726;">
                         <img src="Assets/perception/Depth.png"
                             alt="Grayscale depth frame showing corridor geometry and obstacle distance" loading="lazy"
@@ -1902,7 +2027,7 @@
                     </div>
                 </div>
 
-                <div class="glass-strong p-6 fade-in" data-d="2"
+                <div class="p-2 lg:p-6 fade-in" data-d="2"
                     style="display:flex;flex-direction:column;justify-content:center;">
                     <h3 class="font-orbitron font-bold mb-4" style="font-size:1rem;color:#0D1726;">DEPTH IMAGE
                         COMPRESSION
@@ -1920,26 +2045,27 @@
                         <div
                             style="padding:14px 8px;border:1px solid rgba(33,134,118,0.35);border-radius:9px;background:rgba(255,255,255,0.55);">
                             <div class="font-orbitron" style="font-size:0.62rem;color:#218676;font-weight:700;">DEPTH
+                                IMAGE
                             </div>
-                            <div style="font-size:0.65rem;color:rgba(13,23,38,0.6);margin-top:4px;">Image
-                                <span style="display:block;margin-top:3px;">128 × 72</span>
+                            <div style="font-size:0.65rem;color:rgba(13,23,38,0.6);margin-top:4px;">
+                                128 × 72
                             </div>
                         </div>
                         <span style="color:#218676;font-size:1.1rem;">→</span>
                         <div
                             style="padding:14px 8px;border:1px solid rgba(33,134,118,0.55);border-radius:9px;background:rgba(33,134,118,0.08);">
-                            <div class="font-orbitron" style="font-size:0.62rem;color:#218676;font-weight:700;">ENCODER
+                            <div class="font-orbitron" style="font-size:0.62rem;color:#218676;font-weight:700;">AUTO
+                                ENCODER
                             </div>
-                            <div style="font-size:0.65rem;color:rgba(13,23,38,0.6);margin-top:4px;">AE</div>
                         </div>
                         <span style="color:#218676;font-size:1.1rem;">→</span>
                         <div
                             style="padding:14px 8px;border:1px solid #218676;border-radius:9px;background:#0D1726;box-shadow:0 0 20px rgba(33,134,118,0.18);">
                             <div class="font-orbitron" style="font-size:0.62rem;color:#8fd4c9;font-weight:700;">LATENT
+                                VECTOR
                             </div>
-                            <div style="font-size:0.65rem;color:rgba(255,255,255,0.7);margin-top:4px;">Vector
-                                <span style="display:block;margin-top:3px;">64 ×
-                                    1</span>
+                            <div style="font-size:0.65rem;color:rgba(255,255,255,0.7);margin-top:4px;">
+                                64 × 1
                             </div>
                         </div>
                     </div>
@@ -1965,8 +2091,8 @@
             </div>
 
             <div class="fade-in">
-                <div class="grid lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 items-center">
-                    <div class="glass p-6" style="padding-top:20px;">
+                <div class="controller-grid grid gap-4 items-center">
+                    <div class="controller-card glass p-6" style="padding-top:20px;">
                         <h3 class="font-orbitron font-bold mb-3" style="font-size:0.92rem;color:#218676;">
                             HIGH-LEVEL CONTROLLER</h3>
                         <p style="font-size:0.78rem;color:rgba(13,23,38,0.76);line-height:1.7;">
@@ -1974,7 +2100,7 @@
                             decides
                             where the drone should move next.
                         </p>
-                        <div
+                        <div class="controller-output"
                             style="margin-top:18px;padding:10px 12px;border-left:3px solid #218676;background:rgba(33,134,118,0.06);font-size:0.7rem;color:rgba(13,23,38,0.72);">
                             OUTPUT · NAVIGATION COMMAND
                         </div>
@@ -1985,7 +2111,7 @@
                         <span class="hidden lg:inline">→</span><span class="lg:hidden">↓</span>
                     </div>
 
-                    <div class="glass p-6" style="padding-top:20px;">
+                    <div class="controller-card glass p-6" style="padding-top:20px;">
                         <h3 class="font-orbitron font-bold mb-3" style="font-size:0.92rem;color:#218676;">LOW-LEVEL
                             CONTROLLER</h3>
                         <p style="font-size:0.78rem;color:rgba(13,23,38,0.76);line-height:1.7;">
@@ -1993,7 +2119,7 @@
                             flight,
                             attitude, stability, and disturbance recovery.
                         </p>
-                        <div
+                        <div class="controller-output"
                             style="margin-top:18px;padding:10px 12px;border-left:3px solid #218676;background:rgba(33,134,118,0.06);font-size:0.7rem;color:rgba(13,23,38,0.72);">
                             OUTPUT · MOTOR COMMANDS
                         </div>
@@ -2006,7 +2132,7 @@
 
                     <div class="stable-flight-media vid-card glass">
                         <div class="vid-thumb" style="background:#0D1726;">
-                            <video src="Assets/third_person.mp4" autoplay loop muted playsinline preload="metadata"
+                            <video src="Assets/third_person.web.mp4" autoplay loop muted playsinline preload="metadata"
                                 aria-label="Third-person view of the autonomous drone in stable flight"
                                 style="width:100%;height:100%;display:block;background:#0D1726;object-fit:cover;"></video>
                         </div>
@@ -2044,7 +2170,7 @@
 
                 <figure class="human-detection-media vid-card glass fade-in" data-d="2">
                     <div class="vid-thumb" style="background:#0D1726;">
-                        <video src="Assets/human_detection.mp4" autoplay loop muted playsinline preload="metadata"
+                        <video src="Assets/human_detection.web.mp4" autoplay loop muted playsinline preload="metadata"
                             aria-label="YOLOv11 detecting a human in the simulated environment"
                             style="width:100%;height:100%;display:block;background:#0D1726;object-fit:cover;"></video>
                     </div>
@@ -2131,7 +2257,7 @@
 
                 <div class="slam-video-card vid-card glass fade-in" data-d="2">
                     <div class="vid-thumb" style="background:#0D1726;">
-                        <video src="Assets/VISUAL_SLAM.mp4" autoplay loop muted playsinline preload="metadata"
+                        <video src="Assets/VISUAL_SLAM.web.mp4" autoplay loop muted playsinline preload="metadata"
                             aria-label="Live visual SLAM mapping and exploration"
                             style="width:100%;height:100%;display:block;background:#0D1726;object-fit:cover;"></video>
                     </div>
@@ -2179,7 +2305,7 @@
                         <img class="dashboard-slide" src="Assets/dashboard/camera-feeds.png"
                             alt="Multi-camera dashboard with front, rear, left, right, depth, saliency, and autoencoder reconstruction feeds"
                             data-title="Camera Feeds"
-                            data-description="Front, rear, port, and starboard views paired with depth input, saliency heatmap, and AE reconstruction for model explainability.">
+                            data-description="Front, right, left, and third person views paired with depth input, saliency heatmap, and AE reconstruction for model explainability.">
                         <img class="dashboard-slide" src="Assets/dashboard/navigation-control.png"
                             alt="PPO navigation dashboard with motor command charts and 3D navigation map"
                             data-title="PPO Navigation"
@@ -3178,34 +3304,35 @@
                 window.scrollY > 40 ? 'rgba(235, 240, 240, 0.96)' : 'rgba(235, 240, 240, 0.82)';
         }, { passive: true });
 
-        /* ── SYNC VIDEO GIFS LENGTHS ── */
+        /* ── PLAY MEDIA ONLY WHILE IT IS ON SCREEN ── */
         document.addEventListener('DOMContentLoaded', () => {
             const videos = Array.from(document.querySelectorAll('.vid-card video'));
-            if (videos.length > 0) {
-                let loadedCount = 0;
-                const syncVideos = () => {
-                    let maxDuration = 0;
-                    videos.forEach(v => {
-                        if (v.duration > maxDuration) maxDuration = v.duration;
-                    });
-                    if (maxDuration > 0) {
-                        videos.forEach(v => {
-                            v.playbackRate = v.duration / maxDuration;
-                        });
-                    }
-                };
-                videos.forEach(v => {
-                    if (v.readyState >= 1) {
-                        loadedCount++;
-                        if (loadedCount === videos.length) syncVideos();
+            if (videos.length === 0) return;
+
+            const playbackObserver = new IntersectionObserver((entries) => {
+                entries.forEach(({ target: video, isIntersecting }) => {
+                    video.playbackRate = 1;
+                    if (isIntersecting && !document.hidden) {
+                        video.play().catch(() => { });
                     } else {
-                        v.addEventListener('loadedmetadata', () => {
-                            loadedCount++;
-                            if (loadedCount === videos.length) syncVideos();
-                        });
+                        video.pause();
                     }
                 });
-            }
+            }, { rootMargin: '120px 0px', threshold: 0.08 });
+
+            videos.forEach(video => playbackObserver.observe(video));
+
+            document.addEventListener('visibilitychange', () => {
+                videos.forEach(video => {
+                    if (document.hidden) {
+                        video.pause();
+                    } else if (video.getBoundingClientRect().bottom >= -120 &&
+                        video.getBoundingClientRect().top <= window.innerHeight + 120) {
+                        video.playbackRate = 1;
+                        video.play().catch(() => { });
+                    }
+                });
+            });
         });
     </script>
 
