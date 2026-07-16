@@ -359,6 +359,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
 
         .media-lightbox-media {
@@ -368,6 +369,17 @@
             background: #0D1726;
             box-shadow: 0 24px 90px rgba(0, 0, 0, 0.4);
             border-radius: 12px;
+            transform-origin: center center;
+            transition: transform 0.12s ease;
+            will-change: transform;
+        }
+
+        .media-lightbox-media.is-image {
+            cursor: zoom-in;
+        }
+
+        .media-lightbox-media.is-image.is-zoomed {
+            cursor: zoom-out;
         }
 
         .media-lightbox-close {
@@ -3440,9 +3452,22 @@
                 'section#slam img', 'section#slam video',
                 'section#dashboard img', 'section#dashboard video',
             ].join(', ');
+            let activeMedia = null;
+            let activeClone = null;
+            let activeZoom = 1;
 
             const clearViewer = () => {
                 stage.querySelectorAll('.media-lightbox-media').forEach(node => node.remove());
+                activeMedia = null;
+                activeClone = null;
+                activeZoom = 1;
+            };
+
+            const applyZoom = (scale) => {
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                activeZoom = Math.max(1, Math.min(4, scale));
+                activeClone.style.transform = `scale(${activeZoom})`;
+                activeClone.classList.toggle('is-zoomed', activeZoom > 1.01);
             };
 
             const closeViewer = () => {
@@ -3456,8 +3481,10 @@
             const openViewer = (media) => {
                 if (!media) return;
                 clearViewer();
+                activeMedia = media;
 
                 const clone = media.cloneNode(true);
+                activeClone = clone;
                 clone.classList.add('media-lightbox-media');
                 clone.classList.remove('dashboard-slide', 'is-active');
                 clone.removeAttribute('loading');
@@ -3479,11 +3506,13 @@
                     clone.style.objectFit = 'contain';
                     clone.play().catch(() => { });
                 } else {
+                    clone.classList.add('is-image');
                     clone.alt = media.alt || 'Fullscreen preview';
                     clone.style.width = 'auto';
                     clone.style.height = 'auto';
                     clone.style.maxWidth = '100%';
                     clone.style.maxHeight = '100%';
+                    applyZoom(1);
                 }
 
                 stage.appendChild(clone);
@@ -3491,6 +3520,31 @@
                 lightbox.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
             };
+
+            stage.addEventListener('wheel', (event) => {
+                if (!lightbox.classList.contains('is-open')) return;
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                event.preventDefault();
+                const step = event.deltaY < 0 ? 1.12 : 0.88;
+                applyZoom(activeZoom * step);
+            }, { passive: false });
+
+            document.addEventListener('keydown', (event) => {
+                if (!lightbox.classList.contains('is-open')) return;
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                if (event.key === '+' || event.key === '=' || event.key === 'Add') {
+                    event.preventDefault();
+                    applyZoom(activeZoom * 1.12);
+                }
+                if (event.key === '-' || event.key === '_' || event.key === 'Subtract') {
+                    event.preventDefault();
+                    applyZoom(activeZoom * 0.88);
+                }
+                if (event.key === '0') {
+                    event.preventDefault();
+                    applyZoom(1);
+                }
+            });
 
             document.addEventListener('click', (event) => {
                 const media = event.target.closest(mediaSelector);
