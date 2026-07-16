@@ -376,10 +376,34 @@
 
         .media-lightbox-media.is-image {
             cursor: zoom-in;
+            touch-action: none;
         }
 
         .media-lightbox-media.is-image.is-zoomed {
             cursor: zoom-out;
+        }
+
+        .media-lightbox-hint {
+            position: absolute;
+            left: 50%;
+            top: 10px;
+            transform: translateX(-50%);
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(13, 23, 38, 0.85);
+            border: 1px solid rgba(33, 134, 118, 0.45);
+            color: rgba(248, 255, 255, 0.9);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.52rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .media-lightbox.is-open .media-lightbox-hint {
+            opacity: 1;
         }
 
         .media-lightbox-close {
@@ -2474,6 +2498,7 @@
         aria-label="Fullscreen media viewer">
         <div class="media-lightbox-stage" role="presentation">
             <button type="button" class="media-lightbox-close" aria-label="Close fullscreen viewer">✕</button>
+            <div class="media-lightbox-hint">Pinch to zoom</div>
             <div class="media-lightbox-caption">Click to close</div>
         </div>
     </div>
@@ -3455,20 +3480,34 @@
             let activeMedia = null;
             let activeClone = null;
             let activeZoom = 1;
+            let activePan = { x: 0, y: 0 };
+            let pinchState = { active: false, startDistance: 0, startZoom: 1 };
+            let touchStartPoint = null;
 
             const clearViewer = () => {
                 stage.querySelectorAll('.media-lightbox-media').forEach(node => node.remove());
                 activeMedia = null;
                 activeClone = null;
                 activeZoom = 1;
+                activePan = { x: 0, y: 0 };
+                pinchState = { active: false, startDistance: 0, startZoom: 1 };
+                touchStartPoint = null;
             };
 
             const applyZoom = (scale) => {
                 if (!activeClone || !activeClone.classList.contains('is-image')) return;
                 activeZoom = Math.max(1, Math.min(4, scale));
-                activeClone.style.transform = `scale(${activeZoom})`;
+                activeClone.style.transform = `translate(${activePan.x}px, ${activePan.y}px) scale(${activeZoom})`;
                 activeClone.classList.toggle('is-zoomed', activeZoom > 1.01);
             };
+
+            const applyPan = (x, y) => {
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                activePan = { x, y };
+                applyZoom(activeZoom);
+            };
+
+            const touchDistance = (a, b) => Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
 
             const closeViewer = () => {
                 if (!lightbox.classList.contains('is-open')) return;
@@ -3512,6 +3551,7 @@
                     clone.style.height = 'auto';
                     clone.style.maxWidth = '100%';
                     clone.style.maxHeight = '100%';
+                    clone.style.touchAction = 'none';
                     applyZoom(1);
                 }
 
@@ -3528,6 +3568,61 @@
                 const step = event.deltaY < 0 ? 1.12 : 0.88;
                 applyZoom(activeZoom * step);
             }, { passive: false });
+
+            stage.addEventListener('touchstart', (event) => {
+                if (!lightbox.classList.contains('is-open')) return;
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+
+                if (event.touches.length === 2) {
+                    pinchState.active = true;
+                    pinchState.startDistance = touchDistance(event.touches[0], event.touches[1]);
+                    pinchState.startZoom = activeZoom;
+                    touchStartPoint = null;
+                    event.preventDefault();
+                    return;
+                }
+
+                if (event.touches.length === 1) {
+                    touchStartPoint = {
+                        x: event.touches[0].clientX,
+                        y: event.touches[0].clientY,
+                        time: Date.now(),
+                    };
+                }
+            }, { passive: false });
+
+            stage.addEventListener('touchmove', (event) => {
+                if (!lightbox.classList.contains('is-open')) return;
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+
+                if (event.touches.length >= 2) {
+                    pinchState.active = true;
+                    const distance = touchDistance(event.touches[0], event.touches[1]);
+                    const ratio = distance / Math.max(1, pinchState.startDistance);
+                    applyZoom(pinchState.startZoom * ratio);
+                    event.preventDefault();
+                    return;
+                }
+
+                if (event.touches.length === 1 && activeZoom > 1.01 && touchStartPoint) {
+                    const moveX = event.touches[0].clientX - touchStartPoint.x;
+                    const moveY = event.touches[0].clientY - touchStartPoint.y;
+                    applyPan(moveX, moveY);
+                    event.preventDefault();
+                }
+            }, { passive: false });
+
+            stage.addEventListener('touchend', () => {
+                pinchState.active = false;
+                touchStartPoint = null;
+            }, { passive: true });
+
+            stage.addEventListener('dblclick', (event) => {
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                event.preventDefault();
+                applyPan(0, 0);
+                applyZoom(activeZoom > 1.01 ? 1 : 2);
+            });
 
             document.addEventListener('keydown', (event) => {
                 if (!lightbox.classList.contains('is-open')) return;
