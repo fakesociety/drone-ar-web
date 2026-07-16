@@ -178,11 +178,14 @@
             opacity: 0;
             transform: scale(1.015);
             transition: opacity 0.38s ease, transform 0.38s ease;
+            pointer-events: none;
         }
 
         .dashboard-slide.is-active {
             opacity: 1;
             transform: scale(1);
+            pointer-events: auto;
+            z-index: 1;
         }
 
         .dashboard-slider-window::after {
@@ -309,6 +312,99 @@
             font-size: 0.68rem;
             line-height: 1.45;
             color: rgba(13, 23, 38, 0.62);
+        }
+
+        section#showcase img,
+        section#showcase video,
+        section#perception img,
+        section#perception video,
+        section#control img,
+        section#control video,
+        section#detection img,
+        section#detection video,
+        section#slam img,
+        section#slam video,
+        section#dashboard img,
+        section#dashboard video {
+            cursor: zoom-in;
+        }
+
+        .media-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(13, 23, 38, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.22s ease, visibility 0.22s ease;
+        }
+
+        .media-lightbox.is-open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .media-lightbox-stage {
+            position: relative;
+            width: min(96vw, 1400px);
+            height: min(92vh, 900px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .media-lightbox-media {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            background: #0D1726;
+            box-shadow: 0 24px 90px rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+        }
+
+        .media-lightbox-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(143, 212, 201, 0.45);
+            border-radius: 999px;
+            background: rgba(13, 23, 38, 0.88);
+            color: #f8ffff;
+            font-size: 1rem;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .media-lightbox-close:hover {
+            background: rgba(33, 134, 118, 0.88);
+        }
+
+        .media-lightbox-caption {
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(13, 23, 38, 0.85);
+            border: 1px solid rgba(33, 134, 118, 0.45);
+            color: rgba(248, 255, 255, 0.9);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.56rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            pointer-events: none;
         }
 
         /* ═══════════════════════════════════════
@@ -2362,6 +2458,14 @@
         </div>
     </footer>
 
+    <div id="media-lightbox" class="media-lightbox" aria-hidden="true" role="dialog" aria-modal="true"
+        aria-label="Fullscreen media viewer">
+        <div class="media-lightbox-stage" role="presentation">
+            <button type="button" class="media-lightbox-close" aria-label="Close fullscreen viewer">✕</button>
+            <div class="media-lightbox-caption">Click to close</div>
+        </div>
+    </div>
+
     <!-- ╔══════════════════════════════════════════╗
      ║              JAVASCRIPT                 ║
      ╚══════════════════════════════════════════╝ -->
@@ -3322,6 +3426,89 @@
                 });
             });
         });
+
+        /* ── FULLSCREEN MEDIA VIEWER ── */
+        (() => {
+            const lightbox = document.getElementById('media-lightbox');
+            const stage = lightbox.querySelector('.media-lightbox-stage');
+            const closeBtn = lightbox.querySelector('.media-lightbox-close');
+            const mediaSelector = [
+                'section#showcase img', 'section#showcase video',
+                'section#perception img', 'section#perception video',
+                'section#control img', 'section#control video',
+                'section#detection img', 'section#detection video',
+                'section#slam img', 'section#slam video',
+                'section#dashboard img', 'section#dashboard video',
+            ].join(', ');
+
+            const clearViewer = () => {
+                stage.querySelectorAll('.media-lightbox-media').forEach(node => node.remove());
+            };
+
+            const closeViewer = () => {
+                if (!lightbox.classList.contains('is-open')) return;
+                lightbox.classList.remove('is-open');
+                lightbox.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                clearViewer();
+            };
+
+            const openViewer = (media) => {
+                if (!media) return;
+                clearViewer();
+
+                const clone = media.cloneNode(true);
+                clone.classList.add('media-lightbox-media');
+                clone.classList.remove('dashboard-slide', 'is-active');
+                clone.removeAttribute('loading');
+                clone.removeAttribute('decoding');
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.removeAttribute('style');
+
+                if (clone.tagName === 'VIDEO') {
+                    clone.controls = true;
+                    clone.autoplay = true;
+                    clone.muted = true;
+                    clone.playsInline = true;
+                    clone.loop = media.loop;
+                    clone.setAttribute('playsinline', '');
+                    clone.setAttribute('webkit-playsinline', '');
+                    clone.style.width = '100%';
+                    clone.style.height = '100%';
+                    clone.style.objectFit = 'contain';
+                    clone.play().catch(() => { });
+                } else {
+                    clone.alt = media.alt || 'Fullscreen preview';
+                    clone.style.width = 'auto';
+                    clone.style.height = 'auto';
+                    clone.style.maxWidth = '100%';
+                    clone.style.maxHeight = '100%';
+                }
+
+                stage.appendChild(clone);
+                lightbox.classList.add('is-open');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            };
+
+            document.addEventListener('click', (event) => {
+                const media = event.target.closest(mediaSelector);
+                if (!media) return;
+                if (lightbox.classList.contains('is-open')) {
+                    closeViewer();
+                    return;
+                }
+                event.preventDefault();
+                openViewer(media);
+            });
+
+            lightbox.addEventListener('click', closeViewer);
+            closeBtn.addEventListener('click', closeViewer);
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') closeViewer();
+            });
+        })();
     </script>
 
 </body>
