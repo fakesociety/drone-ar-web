@@ -4,13 +4,13 @@ Project showcase website for an autonomous search-and-rescue drone developed at 
 
 ## Website sections
 
-- Research Team
 - Training Environment
 - Spatial Perception and depth-image compression
 - Hierarchical flight and navigation control
 - Human Detection
 - Visual SLAM
 - Mission Dashboard
+- Research Team
 
 ## Technology
 
