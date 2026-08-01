@@ -178,11 +178,14 @@
             opacity: 0;
             transform: scale(1.015);
             transition: opacity 0.38s ease, transform 0.38s ease;
+            pointer-events: none;
         }
 
         .dashboard-slide.is-active {
             opacity: 1;
             transform: scale(1);
+            pointer-events: auto;
+            z-index: 1;
         }
 
         .dashboard-slider-window::after {
@@ -309,6 +312,135 @@
             font-size: 0.68rem;
             line-height: 1.45;
             color: rgba(13, 23, 38, 0.62);
+        }
+
+        section#showcase img,
+        section#showcase video,
+        section#perception img,
+        section#perception video,
+        section#control img,
+        section#control video,
+        section#detection img,
+        section#detection video,
+        section#slam img,
+        section#slam video,
+        section#dashboard img,
+        section#dashboard video {
+            cursor: zoom-in;
+        }
+
+        .media-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(13, 23, 38, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.22s ease, visibility 0.22s ease;
+        }
+
+        .media-lightbox.is-open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .media-lightbox-stage {
+            position: relative;
+            width: min(96vw, 1400px);
+            height: min(92vh, 900px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .media-lightbox-media {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            background: #0D1726;
+            box-shadow: 0 24px 90px rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            transform-origin: center center;
+            transition: transform 0.12s ease;
+            will-change: transform;
+        }
+
+        .media-lightbox-media.is-image {
+            cursor: zoom-in;
+            touch-action: none;
+        }
+
+        .media-lightbox-media.is-image.is-zoomed {
+            cursor: zoom-out;
+        }
+
+        .media-lightbox-hint {
+            position: absolute;
+            left: 50%;
+            top: 10px;
+            transform: translateX(-50%);
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(13, 23, 38, 0.85);
+            border: 1px solid rgba(33, 134, 118, 0.45);
+            color: rgba(248, 255, 255, 0.9);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.52rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .media-lightbox.is-open .media-lightbox-hint {
+            opacity: 1;
+        }
+
+        .media-lightbox-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(143, 212, 201, 0.45);
+            border-radius: 999px;
+            background: rgba(13, 23, 38, 0.88);
+            color: #f8ffff;
+            font-size: 1rem;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .media-lightbox-close:hover {
+            background: rgba(33, 134, 118, 0.88);
+        }
+
+        .media-lightbox-caption {
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(13, 23, 38, 0.85);
+            border: 1px solid rgba(33, 134, 118, 0.45);
+            color: rgba(248, 255, 255, 0.9);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.56rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            pointer-events: none;
         }
 
         /* ═══════════════════════════════════════
@@ -1927,6 +2059,15 @@
         </div>
     </footer>
 
+    <div id="media-lightbox" class="media-lightbox" aria-hidden="true" role="dialog" aria-modal="true"
+        aria-label="Fullscreen media viewer">
+        <div class="media-lightbox-stage" role="presentation">
+            <button type="button" class="media-lightbox-close" aria-label="Close fullscreen viewer">✕</button>
+            <div class="media-lightbox-hint">Pinch to zoom</div>
+            <div class="media-lightbox-caption">Click to close</div>
+        </div>
+    </div>
+
     <!-- ╔══════════════════════════════════════════╗
      ║              JAVASCRIPT                 ║
      ╚══════════════════════════════════════════╝ -->
@@ -2122,6 +2263,201 @@
                 });
             });
         });
+
+        /* ── FULLSCREEN MEDIA VIEWER ── */
+        (() => {
+            const lightbox = document.getElementById('media-lightbox');
+            const stage = lightbox.querySelector('.media-lightbox-stage');
+            const closeBtn = lightbox.querySelector('.media-lightbox-close');
+            const mediaSelector = [
+                'section#showcase img', 'section#showcase video',
+                'section#perception img', 'section#perception video',
+                'section#control img', 'section#control video',
+                'section#detection img', 'section#detection video',
+                'section#slam img', 'section#slam video',
+                'section#dashboard img', 'section#dashboard video',
+            ].join(', ');
+            let activeMedia = null;
+            let activeClone = null;
+            let activeZoom = 1;
+            let activePan = { x: 0, y: 0 };
+            let pinchState = { active: false, startDistance: 0, startZoom: 1 };
+            let touchStartPoint = null;
+
+            const clearViewer = () => {
+                stage.querySelectorAll('.media-lightbox-media').forEach(node => node.remove());
+                activeMedia = null;
+                activeClone = null;
+                activeZoom = 1;
+                activePan = { x: 0, y: 0 };
+                pinchState = { active: false, startDistance: 0, startZoom: 1 };
+                touchStartPoint = null;
+            };
+
+            const applyZoom = (scale) => {
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                activeZoom = Math.max(1, Math.min(4, scale));
+                activeClone.style.transform = `translate(${activePan.x}px, ${activePan.y}px) scale(${activeZoom})`;
+                activeClone.classList.toggle('is-zoomed', activeZoom > 1.01);
+            };
+
+            const applyPan = (x, y) => {
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                activePan = { x, y };
+                applyZoom(activeZoom);
+            };
+
+            const touchDistance = (a, b) => Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
+
+            const closeViewer = () => {
+                if (!lightbox.classList.contains('is-open')) return;
+                lightbox.classList.remove('is-open');
+                lightbox.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                clearViewer();
+            };
+
+            const openViewer = (media) => {
+                if (!media) return;
+                clearViewer();
+                activeMedia = media;
+
+                const clone = media.cloneNode(true);
+                activeClone = clone;
+                clone.classList.add('media-lightbox-media');
+                clone.classList.remove('dashboard-slide', 'is-active');
+                clone.removeAttribute('loading');
+                clone.removeAttribute('decoding');
+                clone.removeAttribute('width');
+                clone.removeAttribute('height');
+                clone.removeAttribute('style');
+
+                if (clone.tagName === 'VIDEO') {
+                    clone.controls = true;
+                    clone.autoplay = true;
+                    clone.muted = true;
+                    clone.playsInline = true;
+                    clone.loop = media.loop;
+                    clone.setAttribute('playsinline', '');
+                    clone.setAttribute('webkit-playsinline', '');
+                    clone.style.width = '100%';
+                    clone.style.height = '100%';
+                    clone.style.objectFit = 'contain';
+                    clone.play().catch(() => { });
+                } else {
+                    clone.classList.add('is-image');
+                    clone.alt = media.alt || 'Fullscreen preview';
+                    clone.style.width = 'auto';
+                    clone.style.height = 'auto';
+                    clone.style.maxWidth = '100%';
+                    clone.style.maxHeight = '100%';
+                    clone.style.touchAction = 'none';
+                    applyZoom(1);
+                }
+
+                stage.appendChild(clone);
+                lightbox.classList.add('is-open');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            };
+
+            stage.addEventListener('wheel', (event) => {
+                if (!lightbox.classList.contains('is-open')) return;
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                event.preventDefault();
+                const step = event.deltaY < 0 ? 1.12 : 0.88;
+                applyZoom(activeZoom * step);
+            }, { passive: false });
+
+            stage.addEventListener('touchstart', (event) => {
+                if (!lightbox.classList.contains('is-open')) return;
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+
+                if (event.touches.length === 2) {
+                    pinchState.active = true;
+                    pinchState.startDistance = touchDistance(event.touches[0], event.touches[1]);
+                    pinchState.startZoom = activeZoom;
+                    touchStartPoint = null;
+                    event.preventDefault();
+                    return;
+                }
+
+                if (event.touches.length === 1) {
+                    touchStartPoint = {
+                        x: event.touches[0].clientX,
+                        y: event.touches[0].clientY,
+                        time: Date.now(),
+                    };
+                }
+            }, { passive: false });
+
+            stage.addEventListener('touchmove', (event) => {
+                if (!lightbox.classList.contains('is-open')) return;
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+
+                if (event.touches.length >= 2) {
+                    pinchState.active = true;
+                    const distance = touchDistance(event.touches[0], event.touches[1]);
+                    const ratio = distance / Math.max(1, pinchState.startDistance);
+                    applyZoom(pinchState.startZoom * ratio);
+                    event.preventDefault();
+                    return;
+                }
+
+                if (event.touches.length === 1 && activeZoom > 1.01 && touchStartPoint) {
+                    const moveX = event.touches[0].clientX - touchStartPoint.x;
+                    const moveY = event.touches[0].clientY - touchStartPoint.y;
+                    applyPan(moveX, moveY);
+                    event.preventDefault();
+                }
+            }, { passive: false });
+
+            stage.addEventListener('touchend', () => {
+                pinchState.active = false;
+                touchStartPoint = null;
+            }, { passive: true });
+
+            stage.addEventListener('dblclick', (event) => {
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                event.preventDefault();
+                applyPan(0, 0);
+                applyZoom(activeZoom > 1.01 ? 1 : 2);
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (!lightbox.classList.contains('is-open')) return;
+                if (!activeClone || !activeClone.classList.contains('is-image')) return;
+                if (event.key === '+' || event.key === '=' || event.key === 'Add') {
+                    event.preventDefault();
+                    applyZoom(activeZoom * 1.12);
+                }
+                if (event.key === '-' || event.key === '_' || event.key === 'Subtract') {
+                    event.preventDefault();
+                    applyZoom(activeZoom * 0.88);
+                }
+                if (event.key === '0') {
+                    event.preventDefault();
+                    applyZoom(1);
+                }
+            });
+
+            document.addEventListener('click', (event) => {
+                const media = event.target.closest(mediaSelector);
+                if (!media) return;
+                if (lightbox.classList.contains('is-open')) {
+                    closeViewer();
+                    return;
+                }
+                event.preventDefault();
+                openViewer(media);
+            });
+
+            lightbox.addEventListener('click', closeViewer);
+            closeBtn.addEventListener('click', closeViewer);
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') closeViewer();
+            });
+        })();
     </script>
 
 </body>
