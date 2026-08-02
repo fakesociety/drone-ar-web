@@ -1270,10 +1270,291 @@
                 order: 2;
             }
         }
+        /* ═══════════════════════════════════════
+       PRECISION 3D DRONE & LASER CURSOR
+    ═══════════════════════════════════════ */
+        @media (pointer: fine) {
+            body, a, button, input, select, textarea, [role="button"], label, .nav-link, .btn-neon, video, summary, iframe {
+                cursor: none !important;
+            }
+        }
+
+        #drone-cursor-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+            z-index: 999999;
+        }
+
+        /* LAYER A: INSTANT TACTICAL CYBER CURSOR POINTER */
+        #drone-laser-pointer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 22px;
+            height: 22px;
+            margin-top: -1px;
+            margin-left: -1px;
+            pointer-events: none;
+            will-change: transform;
+            z-index: 1000000;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .pointer-arrow-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            filter: drop-shadow(0 0 6px rgba(33, 134, 118, 0.85));
+            transition: transform 0.15s ease;
+        }
+
+        .laser-crosshair {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid rgba(33, 134, 118, 0.75);
+            border-radius: 50%;
+            transform: scale(0.7);
+            opacity: 0;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .laser-crosshair::before {
+            content: '';
+            position: absolute;
+            top: -4px; bottom: -4px; left: 50%; width: 1.5px;
+            transform: translateX(-50%);
+            background: linear-gradient(to bottom, #218676 20%, transparent 20%, transparent 80%, #218676 80%);
+        }
+
+        .laser-crosshair::after {
+            content: '';
+            position: absolute;
+            left: -4px; right: -4px; top: 50%; height: 1.5px;
+            transform: translateY(-50%);
+            background: linear-gradient(to right, #218676 20%, transparent 20%, transparent 80%, #218676 80%);
+        }
+
+        /* Hovering State: Arrow glows in AeroRescue Teal & crosshair activates over buttons */
+        #drone-cursor-container.is-hovering .pointer-arrow-svg {
+            transform: scale(1.18);
+            filter: drop-shadow(0 0 10px #218676);
+        }
+
+        #drone-cursor-container.is-hovering .laser-crosshair {
+            transform: scale(1.35);
+            opacity: 1;
+            border-color: #218676;
+            box-shadow: 0 0 12px rgba(33, 134, 118, 0.85);
+        }
+
+        /* LAYER B: 3D QUADCOPTER DRONE MODEL (COMPACT CLOSE OFFSET) */
+        #drone-3d-model {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 48px;
+            height: 48px;
+            margin-top: 2px;
+            margin-left: 6px;
+            pointer-events: none;
+            will-change: transform, opacity;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 600px;
+        }
+
+        .drone-3d-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            filter: drop-shadow(0 8px 16px rgba(13, 23, 38, 0.45));
+            transform: rotateX(28deg) rotateZ(-12deg);
+            transition: transform 0.25s ease-out;
+        }
+
+        /* 3D Rotor Animations */
+        @keyframes rotorSpin3DCW {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotorSpin3DCCW {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        .drone-rotor-3d.rotor-cw {
+            animation: rotorSpin3DCW 0.2s linear infinite;
+        }
+
+        .drone-rotor-3d.rotor-ccw {
+            animation: rotorSpin3DCCW 0.2s linear infinite;
+        }
+
+        .led-blink-red {
+            fill: #FF4757;
+            animation: ledBlink 0.8s ease-in-out infinite;
+        }
+
+        .led-blink-green {
+            fill: #2ED573;
+            animation: ledBlink 0.8s ease-in-out 0.4s infinite;
+        }
+
+        .led-pulse-cyan {
+            fill: #218676;
+            animation: ledPulse 1.2s ease-in-out infinite;
+        }
+
+        #drone-cursor-container.is-hovering .drone-rotor-3d.rotor-cw {
+            animation-duration: 0.1s;
+        }
+
+        #drone-cursor-container.is-hovering .drone-rotor-3d.rotor-ccw {
+            animation-duration: 0.1s;
+        }
+
+        #drone-cursor-container.is-hovering .drone-3d-svg {
+            transform: rotateX(18deg) rotateZ(-6deg) scale(1.08);
+        }
     </style>
 </head>
 
 <body class="bg-[#EBF0F0] text-[#0D1726] font-inter overflow-x-hidden">
+
+    <!-- ╔══════════════════════════════════════════╗
+     ║        3D DRONE & LASER CURSOR           ║
+     ╚══════════════════════════════════════════╝ -->
+    <div id="drone-cursor-container" aria-hidden="true">
+        <!-- Layer A: Instant Tactical Cyber Cursor Pointer (Locked to Mouse X, Y) -->
+        <div id="drone-laser-pointer">
+            <svg viewBox="0 0 24 24" class="pointer-arrow-svg">
+                <defs>
+                    <linearGradient id="cursorArrowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#2CA08E"/>
+                        <stop offset="60%" stop-color="#218676"/>
+                        <stop offset="100%" stop-color="#0D1726"/>
+                    </linearGradient>
+                </defs>
+                <!-- Shadow -->
+                <path d="M3,3 L19,11 L11.5,13.2 L9.2,19 Z" fill="rgba(13, 23, 38, 0.45)"/>
+                <!-- Main Cyber Arrow Pointer Body -->
+                <path d="M1,1 L17,9 L9.5,11.2 L7.2,17 Z" fill="url(#cursorArrowGrad)" stroke="#218676" stroke-width="1.2"/>
+                <!-- White Glowing Pointer Tip Line -->
+                <path d="M2.5,2.5 L12,7.2 L8.2,8.5 L6.8,12 Z" fill="#FFFFFF" opacity="0.95"/>
+                <!-- Precision Hotspot Dot at Tip (0,0) -->
+                <circle cx="1" cy="1" r="2" fill="#218676"/>
+            </svg>
+            <div class="laser-crosshair"></div>
+        </div>
+
+        <!-- Layer B: 3D Quadcopter Drone (Smooth Flying Follower) -->
+        <div id="drone-3d-model">
+            <svg viewBox="0 0 100 100" class="drone-3d-svg">
+                <defs>
+                    <linearGradient id="droneBody3D" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#2CA08E"/>
+                        <stop offset="45%" stop-color="#218676"/>
+                        <stop offset="100%" stop-color="#0B131E"/>
+                    </linearGradient>
+                    <linearGradient id="visorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#2CA08E"/>
+                        <stop offset="100%" stop-color="#155D52"/>
+                    </linearGradient>
+                    <filter id="tealGlow" x="-30%" y="-30%" width="160%" height="160%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+
+                <!-- Ground Shadow under 3D Drone -->
+                <ellipse cx="50" cy="82" rx="26" ry="7" fill="rgba(13, 23, 38, 0.4)" filter="blur(2px)"/>
+
+                <!-- 3D Carbon Fiber Arms (Thick Struts) -->
+                <!-- Rear Left Arm -->
+                <path d="M46,52 L18,68 L16,72 L46,56 Z" fill="#1A202C"/>
+                <path d="M46,50 L18,66 L18,68 L46,52 Z" fill="#4A5568"/>
+
+                <!-- Rear Right Arm -->
+                <path d="M54,52 L82,64 L80,68 L54,56 Z" fill="#1A202C"/>
+                <path d="M54,50 L82,62 L82,64 L54,52 Z" fill="#4A5568"/>
+
+                <!-- Front Left Arm -->
+                <path d="M44,46 L14,28 L12,32 L44,49 Z" fill="#1A202C"/>
+                <path d="M44,44 L14,26 L14,28 L44,46 Z" fill="#718096"/>
+
+                <!-- Front Right Arm -->
+                <path d="M56,46 L86,22 L84,26 L56,49 Z" fill="#1A202C"/>
+                <path d="M56,44 L86,20 L86,22 L56,46 Z" fill="#718096"/>
+
+                <!-- 3D Rotors (Perspective Ellipses) -->
+                <!-- Front-Left Rotor -->
+                <ellipse cx="14" cy="26" rx="15" ry="6" fill="rgba(33, 134, 118, 0.12)" stroke="rgba(33, 134, 118, 0.45)" stroke-width="1"/>
+                <g class="drone-rotor-3d rotor-cw" style="transform-origin: 14px 26px;">
+                    <ellipse cx="14" cy="26" rx="14" ry="3.5" fill="none" stroke="#218676" stroke-width="1.8"/>
+                    <line x1="2" y1="26" x2="26" y2="26" stroke="#218676" stroke-width="1.5"/>
+                </g>
+                <path d="M12,25 L16,25 L16,28 L12,28 Z" fill="#2D3748"/>
+                <ellipse cx="14" cy="25" rx="2.5" ry="1.2" fill="#218676"/>
+
+                <!-- Front-Right Rotor -->
+                <ellipse cx="86" cy="20" rx="15" ry="6" fill="rgba(33, 134, 118, 0.12)" stroke="rgba(33, 134, 118, 0.45)" stroke-width="1"/>
+                <g class="drone-rotor-3d rotor-ccw" style="transform-origin: 86px 20px;">
+                    <ellipse cx="86" cy="20" rx="14" ry="3.5" fill="none" stroke="#218676" stroke-width="1.8"/>
+                    <line x1="74" y1="20" x2="98" y2="20" stroke="#218676" stroke-width="1.5"/>
+                </g>
+                <path d="M84,19 L88,19 L88,22 L84,22 Z" fill="#2D3748"/>
+                <ellipse cx="86" cy="19" rx="2.5" ry="1.2" fill="#218676"/>
+
+                <!-- Rear-Left Rotor -->
+                <ellipse cx="18" cy="66" rx="16" ry="7" fill="rgba(33, 134, 118, 0.12)" stroke="rgba(33, 134, 118, 0.38)" stroke-width="1"/>
+                <g class="drone-rotor-3d rotor-ccw" style="transform-origin: 18px 66px;">
+                    <ellipse cx="18" cy="66" rx="15" ry="4" fill="none" stroke="#218676" stroke-width="1.8"/>
+                    <line x1="5" y1="66" x2="31" y2="66" stroke="#218676" stroke-width="1.5"/>
+                </g>
+                <path d="M16,65 L20,65 L20,68 L16,68 Z" fill="#2D3748"/>
+                <ellipse cx="18" cy="65" rx="2.5" ry="1.2" fill="#218676"/>
+
+                <!-- Rear-Right Rotor -->
+                <ellipse cx="82" cy="62" rx="16" ry="7" fill="rgba(33, 134, 118, 0.12)" stroke="rgba(33, 134, 118, 0.38)" stroke-width="1"/>
+                <g class="drone-rotor-3d rotor-cw" style="transform-origin: 82px 62px;">
+                    <ellipse cx="82" cy="62" rx="15" ry="4" fill="none" stroke="#218676" stroke-width="1.8"/>
+                    <line x1="69" y1="62" x2="95" y2="62" stroke="#218676" stroke-width="1.5"/>
+                </g>
+                <path d="M80,61 L84,61 L84,64 L80,64 Z" fill="#2D3748"/>
+                <ellipse cx="82" cy="61" rx="2.5" ry="1.2" fill="#218676"/>
+
+                <!-- 3D Aerodynamic Fuselage (Body Hull) -->
+                <!-- Bottom Chassis -->
+                <path d="M34,54 L50,68 L66,58 L50,44 Z" fill="#0B131E"/>
+
+                <!-- Main Body Shell -->
+                <path d="M36,46 L50,30 L64,38 L50,58 Z" fill="url(#droneBody3D)" stroke="#218676" stroke-width="1.5"/>
+
+                <!-- Cockpit Visor -->
+                <path d="M40,41 L50,31 L60,37 L50,49 Z" fill="url(#visorGrad)" opacity="0.9"/>
+
+                <!-- Front Camera Gimbal Lens Facing Pointer Target -->
+                <path d="M45,31 L50,23 L55,27 L50,33 Z" fill="#1A202C" stroke="#218676" stroke-width="1.2"/>
+                <circle cx="50" cy="26" r="3" fill="#218676" filter="url(#tealGlow)"/>
+                <circle cx="50" cy="26" r="1.2" fill="#FFFFFF"/>
+
+                <!-- Navigation Lights -->
+                <circle cx="14" cy="26" r="2" class="led-blink-red"/>
+                <circle cx="86" cy="20" r="2" class="led-blink-green"/>
+                <circle cx="50" cy="64" r="2" class="led-pulse-cyan"/>
+            </svg>
+        </div>
+    </div>
 
     <!-- ╔══════════════════════════════════════════╗
      ║           LOADING SCREEN                ║
@@ -2457,6 +2738,101 @@
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape') closeViewer();
             });
+        })();
+    </script>
+
+    <script>
+        /* ═══════════════════════════════════════
+           PRECISION 3D DRONE & LASER CONTROLLER
+        ═══════════════════════════════════════ */
+        (function init3DDroneCursor() {
+            if (window.matchMedia('(pointer: coarse)').matches) return;
+
+            const container = document.getElementById('drone-cursor-container');
+            const laser = document.getElementById('drone-laser-pointer');
+            const drone = document.getElementById('drone-3d-model');
+            if (!container || !laser || !drone) return;
+
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let currentX = mouseX;
+            let currentY = mouseY;
+            let targetTiltX = 0, currentTiltX = 0;
+            let targetTiltY = 0, currentTiltY = 0;
+            let isVisible = false;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+
+                // Layer A: Instant Laser Target Pointer - Locked 100% to Mouse (mouseX, mouseY)
+                laser.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+
+                if (!isVisible) {
+                    isVisible = true;
+                    drone.style.opacity = '1';
+                    laser.style.opacity = '1';
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                isVisible = false;
+                drone.style.opacity = '0';
+                laser.style.opacity = '0';
+            });
+
+            document.addEventListener('mouseenter', () => {
+                isVisible = true;
+                drone.style.opacity = '1';
+                laser.style.opacity = '1';
+            });
+
+            document.addEventListener('mousedown', () => {
+                container.classList.add('is-clicking');
+            });
+
+            document.addEventListener('mouseup', () => {
+                container.classList.remove('is-clicking');
+            });
+
+            const interactiveSelector = 'a, button, input, select, textarea, [role="button"], label, .nav-link, .btn-neon, video, summary, [tabindex], .interactive, .cursor-pointer';
+            
+            document.addEventListener('mouseover', (e) => {
+                if (e.target.closest(interactiveSelector)) {
+                    container.classList.add('is-hovering');
+                }
+            });
+
+            document.addEventListener('mouseout', (e) => {
+                if (e.target.closest(interactiveSelector)) {
+                    container.classList.remove('is-hovering');
+                }
+            });
+
+            // Layer B: Smooth 3D Drone Flight Rendering Loop
+            function render() {
+                const dx = mouseX - currentX;
+                const dy = mouseY - currentY;
+
+                currentX += dx * 0.22;
+                currentY += dy * 0.22;
+
+                // 3D Banking Tilt based on speed
+                targetTiltY = Math.max(-20, Math.min(20, dx * 0.5));
+                targetTiltX = Math.max(-15, Math.min(15, -dy * 0.4));
+
+                currentTiltY += (targetTiltY - currentTiltY) * 0.15;
+                currentTiltX += (targetTiltX - currentTiltX) * 0.15;
+
+                // Subtle flight float/hover
+                const floatY = Math.sin(Date.now() * 0.004) * 2;
+
+                drone.style.transform = `translate3d(${currentX}px, ${currentY + floatY}px, 0) rotateX(${28 + currentTiltX}deg) rotateY(${currentTiltY}deg) rotateZ(${-12 + currentTiltY * 0.5}deg)`;
+
+                requestAnimationFrame(render);
+            }
+
+            requestAnimationFrame(render);
         })();
     </script>
 
